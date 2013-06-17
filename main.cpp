@@ -1,5 +1,6 @@
-// g++ -O2 -march=native -I /home/gentryx/libgeodecomp/src/ -L /home/gentryx/libgeodecomp/build/Linux-x86_64/ -lgeodecomp main.cpp -fopenmp -o nbody_demo && echo go && time ./nbody_demo
+// g++ -Ofast -march=native -I /home/gentryx/libgeodecomp/src/ -L /home/gentryx/libgeodecomp/build/Linux-x86_64/ -lgeodecomp main.cpp -fopenmp -o nbody_demo && echo go && echo go && time ./nbody_demo
 #include <libgeodecomp.h>
+#include <pmmintrin.h>
 
 using namespace LibGeoDecomp;
 
@@ -90,7 +91,7 @@ public:
             velZ[i] = oldSelf.velZ[i];
         }
 
-#define INTERACT(REL_X, REL_Y, REL_Z)                                   \
+#define INTERACT1(REL_X, REL_Y, REL_Z)                                  \
         {                                                               \
             const NBodyContainer& neighbor =                            \
                 hood[FixedCoord<REL_X, REL_Y, REL_Z>()];                \
@@ -109,6 +110,86 @@ public:
                     velY[i] += force * deltaY;                          \
                     velZ[i] += force * deltaZ;                          \
                 }                                                       \
+            }                                                           \
+        }
+
+#define INTERACT(REL_X, REL_Y, REL_Z)                                  \
+        {                                                               \
+            const NBodyContainer& neighbor =                            \
+                hood[FixedCoord<REL_X, REL_Y, REL_Z>()];                \
+            __m128 forceOffset = _mm_set1_ps(FORCE_OFFSET);             \
+            for (int i = 0; i < CONTAINER_SIZE; i += 4) {               \
+                __m128 oldSelfPosX = _mm_load_ps(oldSelf.posX + i);     \
+                __m128 oldSelfPosY = _mm_load_ps(oldSelf.posY + i);     \
+                __m128 oldSelfPosZ = _mm_load_ps(oldSelf.posZ + i);     \
+                __m128 myVelX = _mm_load_ps(velX + i);                  \
+                __m128 myVelY = _mm_load_ps(velY + i);                  \
+                __m128 myVelZ = _mm_load_ps(velZ + i);                  \
+                                                                        \
+                for (int j = 0; j < CONTAINER_SIZE; ++j) {              \
+                    __m128 neighborPosX = _mm_set1_ps(neighbor.posX[j]); \
+                    __m128 neighborPosY = _mm_set1_ps(neighbor.posY[j]); \
+                    __m128 neighborPosZ = _mm_set1_ps(neighbor.posZ[j]); \
+                    __m128 deltaX = oldSelfPosX - neighborPosX;         \
+                    __m128 deltaY = oldSelfPosY - neighborPosY;         \
+                    __m128 deltaZ = oldSelfPosZ - neighborPosZ;         \
+                    __m128 dist2 = _mm_add_ps(forceOffset,              \
+                                              _mm_mul_ps(deltaX, deltaX)); \
+                    dist2 = _mm_add_ps(dist2,                           \
+                                       _mm_mul_ps(deltaY, deltaY));     \
+                    dist2 = _mm_add_ps(dist2,                           \
+                                       _mm_mul_ps(deltaZ, deltaZ));     \
+                    __m128 force = _mm_rsqrt_ps(dist2);                 \
+                    myVelX = _mm_add_ps(myVelX, _mm_mul_ps(force, deltaX)); \
+                    myVelY = _mm_add_ps(myVelY, _mm_mul_ps(force, deltaY)); \
+                    myVelZ = _mm_add_ps(myVelZ, _mm_mul_ps(force, deltaZ)); \
+                }                                                       \
+                                                                        \
+                _mm_store_ps(velX + i, myVelX);                         \
+                _mm_store_ps(velY + i, myVelY);                         \
+                _mm_store_ps(velZ + i, myVelZ);                         \
+            }                                                           \
+        }
+
+#define INTERACT3(REL_X, REL_Y, REL_Z)                                  \
+        {                                                               \
+            const NBodyContainer& neighbor =                            \
+                hood[FixedCoord<REL_X, REL_Y, REL_Z>()];                \
+            __m128 forceOffset = _mm_set1_ps(FORCE_OFFSET);             \
+            for (int i = 0; i < CONTAINER_SIZE; ++i) {                  \
+                __m128 oldSelfPosX = _mm_set1_ps(oldSelf.posX[i]);      \
+                __m128 oldSelfPosY = _mm_set1_ps(oldSelf.posY[i]);      \
+                __m128 oldSelfPosZ = _mm_set1_ps(oldSelf.posZ[i]);      \
+                __m128 myVelX = _mm_set_ps(velX[i], 0, 0, 0);           \
+                __m128 myVelY = _mm_set_ps(velY[i], 0, 0, 0);           \
+                __m128 myVelZ = _mm_set_ps(velZ[i], 0, 0, 0);           \
+                                                                        \
+                for (int j = 0; j < CONTAINER_SIZE; j += 4) {           \
+                    __m128 neighborPosX = _mm_load_ps(neighbor.posX + j); \
+                    __m128 neighborPosY = _mm_load_ps(neighbor.posY + j); \
+                    __m128 neighborPosZ = _mm_load_ps(neighbor.posZ + j); \
+                    __m128 deltaX = oldSelfPosX - neighborPosX;         \
+                    __m128 deltaY = oldSelfPosY - neighborPosY;         \
+                    __m128 deltaZ = oldSelfPosZ - neighborPosZ;         \
+                    __m128 dist2 = _mm_add_ps(forceOffset,              \
+                                              _mm_mul_ps(deltaX, deltaX)); \
+                    dist2 = _mm_add_ps(dist2,                           \
+                                       _mm_mul_ps(deltaY, deltaY));     \
+                    dist2 = _mm_add_ps(dist2,                           \
+                                       _mm_mul_ps(deltaZ, deltaZ));     \
+                    __m128 force = _mm_rsqrt_ps(dist2);                 \
+                    myVelX = _mm_add_ps(myVelX, _mm_mul_ps(force, deltaX)); \
+                    myVelY = _mm_add_ps(myVelY, _mm_mul_ps(force, deltaY)); \
+                    myVelZ = _mm_add_ps(myVelZ, _mm_mul_ps(force, deltaZ)); \
+                }                                                       \
+                                                                        \
+                float buf[4];                                           \
+                _mm_storeu_ps(buf, myVelX);                             \
+                velX[i] = buf[0] + buf[1] + buf[2] + buf[3];            \
+                _mm_storeu_ps(buf, myVelY);                             \
+                velY[i] = buf[0] + buf[1] + buf[2] + buf[3];            \
+                _mm_storeu_ps(buf, myVelZ);                             \
+                velZ[i] = buf[0] + buf[1] + buf[2] + buf[3];            \
             }                                                           \
         }
 
@@ -180,7 +261,7 @@ public:
 void runSimulation()
 {
     int outputFrequency = 100;
-    int maxSteps = 10 ;
+    int maxSteps = 100;
     Coord<3> dim(3, 3, 3);
 
     MPI::Aint displacements[] = {0};
