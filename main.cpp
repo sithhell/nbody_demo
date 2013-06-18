@@ -1,4 +1,5 @@
 // g++ -Ofast -march=native -I /home/gentryx/libgeodecomp/src/ -L /home/gentryx/libgeodecomp/build/Linux-x86_64/ -lgeodecomp main.cpp -fopenmp -o nbody_demo && echo go && echo go && time ./nbody_demo
+// g++ -Ofast -march=native -I /home/gentryx/libgeodecomp/src/ -L /home/gentryx/libgeodecomp/build/Linux-x86_64/ -lgeodecomp main.cpp -fopenmp -o nbody_demo && echo go && echo go && time LD_LIBRARY_PATH=/home/gentryx/libgeodecomp/build/Linux-x86_64/ ./nbody_demo
 #include <libgeodecomp.h>
 #include <pmmintrin.h>
 
@@ -8,7 +9,7 @@ using namespace LibGeoDecomp;
 // - loop order
 // - block size
 // - manual vectorization vs. automatic
-
+// - how many threads? 16 vs 32 vs 64
 
 // void update() {
 //     // fixme: make precision configurable
@@ -45,16 +46,158 @@ using namespace LibGeoDecomp;
 //     // fixme: write back
 // }
 
-#define RECIPROCAL_SQUARE_ROOT(x) (1.0 / sqrt(x))
-#define FLOAT float
+#define FORCE_OFFSET 0.01
 
-typedef double FloatType;
-const int CONTAINER_SIZE = 512;
 
+template<int CONTAINER_SIZE, typename FLOAT>
+class InteractorScalar
+{
+public:
+    template<typename CONTAINER>
+    void operator()(CONTAINER *target, const CONTAINER& oldSelf, const CONTAINER& neighbor)
+    {
+        for (int i = 0; i < CONTAINER_SIZE; ++i) {
+            for (int j = 0; j < CONTAINER_SIZE; ++j) {
+                FLOAT deltaX = oldSelf.posX[i] - neighbor.posX[j];
+                FLOAT deltaY = oldSelf.posY[i] - neighbor.posY[j];
+                FLOAT deltaZ = oldSelf.posZ[i] - neighbor.posZ[j];
+                FLOAT dist2 =
+                    FORCE_OFFSET +
+                    deltaX * deltaX +
+                    deltaY * deltaY +
+                    deltaZ * deltaZ;
+                FLOAT force = 1 / sqrt(dist2);
+                target->velX[i] += force * deltaX;
+                target->velY[i] += force * deltaY;
+                target->velZ[i] += force * deltaZ;
+            }
+        }
+    }
+};
+
+template<int CONTAINER_SIZE, typename FLOAT>
+class InteractorScalarSwapped
+{
+public:
+    template<typename CONTAINER>
+    void operator()(CONTAINER *target, const CONTAINER& oldSelf, const CONTAINER& neighbor)
+    {
+        for (int j = 0; j < CONTAINER_SIZE; ++j) {
+            for (int i = 0; i < CONTAINER_SIZE; ++i) {
+                FLOAT deltaX = oldSelf.posX[i] - neighbor.posX[j];
+                FLOAT deltaY = oldSelf.posY[i] - neighbor.posY[j];
+                FLOAT deltaZ = oldSelf.posZ[i] - neighbor.posZ[j];
+                FLOAT dist2 =
+                    FORCE_OFFSET +
+                    deltaX * deltaX +
+                    deltaY * deltaY +
+                    deltaZ * deltaZ;
+                FLOAT force = 1 / sqrt(dist2);
+                target->velX[i] += force * deltaX;
+                target->velY[i] += force * deltaY;
+                target->velZ[i] += force * deltaZ;
+            }
+        }
+    }
+};
+
+template<int CONTAINER_SIZE>
+class InteractorSSE
+{
+public:
+    template<typename CONTAINER>
+    void operator()(CONTAINER *target, const CONTAINER& oldSelf, const CONTAINER& neighbor)
+    {
+        __m128 forceOffset = _mm_set1_ps(FORCE_OFFSET);
+#pragma omp parallel for schedule(static)
+        for (int i = 0; i < CONTAINER_SIZE; i += 4) {
+            __m128 oldSelfPosX = _mm_load_ps(oldSelf.posX + i);
+            __m128 oldSelfPosY = _mm_load_ps(oldSelf.posY + i);
+            __m128 oldSelfPosZ = _mm_load_ps(oldSelf.posZ + i);
+            __m128 myVelX = _mm_load_ps(oldSelf.velX + i);
+            __m128 myVelY = _mm_load_ps(oldSelf.velY + i);
+            __m128 myVelZ = _mm_load_ps(oldSelf.velZ + i);
+
+            for (int j = 0; j < CONTAINER_SIZE; ++j) {
+                __m128 neighborPosX = _mm_set1_ps(neighbor.posX[j]);
+                __m128 neighborPosY = _mm_set1_ps(neighbor.posY[j]);
+                __m128 neighborPosZ = _mm_set1_ps(neighbor.posZ[j]);
+                __m128 deltaX = oldSelfPosX - neighborPosX;
+                __m128 deltaY = oldSelfPosY - neighborPosY;
+                __m128 deltaZ = oldSelfPosZ - neighborPosZ;
+                __m128 dist2 = _mm_add_ps(forceOffset,
+                                          _mm_mul_ps(deltaX, deltaX));
+                dist2 = _mm_add_ps(dist2,
+                                   _mm_mul_ps(deltaY, deltaY));
+                dist2 = _mm_add_ps(dist2,
+                                   _mm_mul_ps(deltaZ, deltaZ));
+                __m128 force = _mm_rsqrt_ps(dist2);
+                myVelX = _mm_add_ps(myVelX, _mm_mul_ps(force, deltaX));
+                myVelY = _mm_add_ps(myVelY, _mm_mul_ps(force, deltaY));
+                myVelZ = _mm_add_ps(myVelZ, _mm_mul_ps(force, deltaZ));
+            }
+
+            _mm_store_ps(target->velX + i, myVelX);
+            _mm_store_ps(target->velY + i, myVelY);
+            _mm_store_ps(target->velZ + i, myVelZ);
+        }
+    }
+};
+
+template<int CONTAINER_SIZE>
+class InteractorSSESwapped
+{
+public:
+    template<typename CONTAINER>
+    void operator()(CONTAINER *target, const CONTAINER& oldSelf, const CONTAINER& neighbor)
+    {
+        __m128 forceOffset = _mm_set1_ps(FORCE_OFFSET);
+#pragma omp parallel for schedule(static)
+        for (int i = 0; i < CONTAINER_SIZE; ++i) {
+            __m128 oldSelfPosX = _mm_set1_ps(oldSelf.posX[i]);
+            __m128 oldSelfPosY = _mm_set1_ps(oldSelf.posY[i]);
+            __m128 oldSelfPosZ = _mm_set1_ps(oldSelf.posZ[i]);
+            __m128 myVelX = _mm_set_ps(oldSelf.velX[i], 0, 0, 0);
+            __m128 myVelY = _mm_set_ps(oldSelf.velY[i], 0, 0, 0);
+            __m128 myVelZ = _mm_set_ps(oldSelf.velZ[i], 0, 0, 0);
+
+            for (int j = 0; j < CONTAINER_SIZE; j += 4) {
+                __m128 neighborPosX = _mm_load_ps(neighbor.posX + j);
+                __m128 neighborPosY = _mm_load_ps(neighbor.posY + j);
+                __m128 neighborPosZ = _mm_load_ps(neighbor.posZ + j);
+                __m128 deltaX = oldSelfPosX - neighborPosX;
+                __m128 deltaY = oldSelfPosY - neighborPosY;
+                __m128 deltaZ = oldSelfPosZ - neighborPosZ;
+                __m128 dist2 = _mm_add_ps(forceOffset,
+                                          _mm_mul_ps(deltaX, deltaX));
+                dist2 = _mm_add_ps(dist2,
+                                   _mm_mul_ps(deltaY, deltaY));
+                dist2 = _mm_add_ps(dist2,
+                                   _mm_mul_ps(deltaZ, deltaZ));
+                __m128 force = _mm_rsqrt_ps(dist2);
+                myVelX = _mm_add_ps(myVelX, _mm_mul_ps(force, deltaX));
+                myVelY = _mm_add_ps(myVelY, _mm_mul_ps(force, deltaY));
+                myVelZ = _mm_add_ps(myVelZ, _mm_mul_ps(force, deltaZ));
+            }
+
+            float buf[4];
+            _mm_storeu_ps(buf, myVelX);
+            target->velX[i] = buf[0] + buf[1] + buf[2] + buf[3];
+            _mm_storeu_ps(buf, myVelY);
+            target->velY[i] = buf[0] + buf[1] + buf[2] + buf[3];
+            _mm_storeu_ps(buf, myVelZ);
+            target->velZ[i] = buf[0] + buf[1] + buf[2] + buf[3];
+        }
+    }
+};
+
+template<int CONTAINER_SIZE, typename FLOAT_TYPE, typename INTERACTOR>
 class NBodyContainer
 {
 public:
-    static const int FORCE_OFFSET = 0.01;
+    typedef FLOAT_TYPE FLOAT;
+    static const int SIZE = CONTAINER_SIZE;
+
     typedef Stencils::Moore<3, 1> Stencil;
     typedef Topologies::Cube<3>::Topology Topology;
     class API : public CellAPITraits::Fixed
@@ -91,107 +234,8 @@ public:
             velZ[i] = oldSelf.velZ[i];
         }
 
-#define INTERACT1(REL_X, REL_Y, REL_Z)                                  \
-        {                                                               \
-            const NBodyContainer& neighbor =                            \
-                hood[FixedCoord<REL_X, REL_Y, REL_Z>()];                \
-            for (int i = 0; i < CONTAINER_SIZE; ++i) {                  \
-                for (int j = 0; j < CONTAINER_SIZE; ++j) {              \
-                    FLOAT deltaX = oldSelf.posX[i] - neighbor.posX[j];  \
-                    FLOAT deltaY = oldSelf.posY[i] - neighbor.posY[j];  \
-                    FLOAT deltaZ = oldSelf.posZ[i] - neighbor.posZ[j];  \
-                    FLOAT dist2 =                                       \
-                        FORCE_OFFSET +                                  \
-                        deltaX * deltaX +                               \
-                        deltaY * deltaY +                               \
-                        deltaZ * deltaZ;                                \
-                    FLOAT force = RECIPROCAL_SQUARE_ROOT(dist2);        \
-                    velX[i] += force * deltaX;                          \
-                    velY[i] += force * deltaY;                          \
-                    velZ[i] += force * deltaZ;                          \
-                }                                                       \
-            }                                                           \
-        }
-
-#define INTERACT(REL_X, REL_Y, REL_Z)                                  \
-        {                                                               \
-            const NBodyContainer& neighbor =                            \
-                hood[FixedCoord<REL_X, REL_Y, REL_Z>()];                \
-            __m128 forceOffset = _mm_set1_ps(FORCE_OFFSET);             \
-            for (int i = 0; i < CONTAINER_SIZE; i += 4) {               \
-                __m128 oldSelfPosX = _mm_load_ps(oldSelf.posX + i);     \
-                __m128 oldSelfPosY = _mm_load_ps(oldSelf.posY + i);     \
-                __m128 oldSelfPosZ = _mm_load_ps(oldSelf.posZ + i);     \
-                __m128 myVelX = _mm_load_ps(velX + i);                  \
-                __m128 myVelY = _mm_load_ps(velY + i);                  \
-                __m128 myVelZ = _mm_load_ps(velZ + i);                  \
-                                                                        \
-                for (int j = 0; j < CONTAINER_SIZE; ++j) {              \
-                    __m128 neighborPosX = _mm_set1_ps(neighbor.posX[j]); \
-                    __m128 neighborPosY = _mm_set1_ps(neighbor.posY[j]); \
-                    __m128 neighborPosZ = _mm_set1_ps(neighbor.posZ[j]); \
-                    __m128 deltaX = oldSelfPosX - neighborPosX;         \
-                    __m128 deltaY = oldSelfPosY - neighborPosY;         \
-                    __m128 deltaZ = oldSelfPosZ - neighborPosZ;         \
-                    __m128 dist2 = _mm_add_ps(forceOffset,              \
-                                              _mm_mul_ps(deltaX, deltaX)); \
-                    dist2 = _mm_add_ps(dist2,                           \
-                                       _mm_mul_ps(deltaY, deltaY));     \
-                    dist2 = _mm_add_ps(dist2,                           \
-                                       _mm_mul_ps(deltaZ, deltaZ));     \
-                    __m128 force = _mm_rsqrt_ps(dist2);                 \
-                    myVelX = _mm_add_ps(myVelX, _mm_mul_ps(force, deltaX)); \
-                    myVelY = _mm_add_ps(myVelY, _mm_mul_ps(force, deltaY)); \
-                    myVelZ = _mm_add_ps(myVelZ, _mm_mul_ps(force, deltaZ)); \
-                }                                                       \
-                                                                        \
-                _mm_store_ps(velX + i, myVelX);                         \
-                _mm_store_ps(velY + i, myVelY);                         \
-                _mm_store_ps(velZ + i, myVelZ);                         \
-            }                                                           \
-        }
-
-#define INTERACT3(REL_X, REL_Y, REL_Z)                                  \
-        {                                                               \
-            const NBodyContainer& neighbor =                            \
-                hood[FixedCoord<REL_X, REL_Y, REL_Z>()];                \
-            __m128 forceOffset = _mm_set1_ps(FORCE_OFFSET);             \
-            for (int i = 0; i < CONTAINER_SIZE; ++i) {                  \
-                __m128 oldSelfPosX = _mm_set1_ps(oldSelf.posX[i]);      \
-                __m128 oldSelfPosY = _mm_set1_ps(oldSelf.posY[i]);      \
-                __m128 oldSelfPosZ = _mm_set1_ps(oldSelf.posZ[i]);      \
-                __m128 myVelX = _mm_set_ps(velX[i], 0, 0, 0);           \
-                __m128 myVelY = _mm_set_ps(velY[i], 0, 0, 0);           \
-                __m128 myVelZ = _mm_set_ps(velZ[i], 0, 0, 0);           \
-                                                                        \
-                for (int j = 0; j < CONTAINER_SIZE; j += 4) {           \
-                    __m128 neighborPosX = _mm_load_ps(neighbor.posX + j); \
-                    __m128 neighborPosY = _mm_load_ps(neighbor.posY + j); \
-                    __m128 neighborPosZ = _mm_load_ps(neighbor.posZ + j); \
-                    __m128 deltaX = oldSelfPosX - neighborPosX;         \
-                    __m128 deltaY = oldSelfPosY - neighborPosY;         \
-                    __m128 deltaZ = oldSelfPosZ - neighborPosZ;         \
-                    __m128 dist2 = _mm_add_ps(forceOffset,              \
-                                              _mm_mul_ps(deltaX, deltaX)); \
-                    dist2 = _mm_add_ps(dist2,                           \
-                                       _mm_mul_ps(deltaY, deltaY));     \
-                    dist2 = _mm_add_ps(dist2,                           \
-                                       _mm_mul_ps(deltaZ, deltaZ));     \
-                    __m128 force = _mm_rsqrt_ps(dist2);                 \
-                    myVelX = _mm_add_ps(myVelX, _mm_mul_ps(force, deltaX)); \
-                    myVelY = _mm_add_ps(myVelY, _mm_mul_ps(force, deltaY)); \
-                    myVelZ = _mm_add_ps(myVelZ, _mm_mul_ps(force, deltaZ)); \
-                }                                                       \
-                                                                        \
-                float buf[4];                                           \
-                _mm_storeu_ps(buf, myVelX);                             \
-                velX[i] = buf[0] + buf[1] + buf[2] + buf[3];            \
-                _mm_storeu_ps(buf, myVelY);                             \
-                velY[i] = buf[0] + buf[1] + buf[2] + buf[3];            \
-                _mm_storeu_ps(buf, myVelZ);                             \
-                velZ[i] = buf[0] + buf[1] + buf[2] + buf[3];            \
-            }                                                           \
-        }
+#define INTERACT(REL_X, REL_Y, REL_Z) \
+        INTERACTOR()(this, oldSelf, hood[FixedCoord<REL_X, REL_Y, REL_Z>()]);
 
         INTERACT(-1, -1, -1);
         INTERACT( 0, -1, -1);
@@ -231,7 +275,6 @@ public:
 
     }
 
-private:
     FLOAT posX[CONTAINER_SIZE];
     FLOAT posY[CONTAINER_SIZE];
     FLOAT posZ[CONTAINER_SIZE];
@@ -240,42 +283,44 @@ private:
     FLOAT velZ[CONTAINER_SIZE];
 };
 
-class NBodyInitializer : public SimpleInitializer<NBodyContainer>
+template<typename CELL>
+class NBodyInitializer : public SimpleInitializer<CELL>
 {
 public:
-    using SimpleInitializer<NBodyContainer>::gridDimensions;
+    using SimpleInitializer<CELL>::gridDimensions;
 
     NBodyInitializer(const Coord<3>& dim, unsigned steps) :
-        SimpleInitializer<NBodyContainer>(dim, steps)
+        SimpleInitializer<CELL>(dim, steps)
     {}
 
-    virtual void grid(GridBase<NBodyContainer, 3> *ret)
+    virtual void grid(GridBase<CELL, 3> *ret)
     {
         CoordBox<3> box = ret->boundingBox();
         for (CoordBox<3>::Iterator i = box.begin(); i != box.end(); ++i) {
-            ret->at(*i) = NBodyContainer(*i);
+            ret->at(*i) = CELL(*i);
         }
     }
 };
 
+template<typename CELL>
 void runSimulation()
 {
     int outputFrequency = 100;
-    int maxSteps = 100;
+    int maxSteps = 400;
     Coord<3> dim(3, 3, 3);
 
     MPI::Aint displacements[] = {0};
     MPI::Datatype memberTypes[] = {MPI::CHAR};
-    int lengths[] = {sizeof(NBodyContainer)};
+    int lengths[] = { sizeof(CELL) };
     MPI::Datatype objType;
     objType =
         MPI::Datatype::Create_struct(1, lengths, displacements, memberTypes);
     objType.Commit();
 
 
-    NBodyInitializer *init = new NBodyInitializer(dim, maxSteps);
+    NBodyInitializer<CELL> *init = new NBodyInitializer<CELL>(dim, maxSteps);
 
-    HiParSimulator::HiParSimulator<NBodyContainer, HiParSimulator::RecursiveBisectionPartition<3> > sim(
+    HiParSimulator::HiParSimulator<CELL, HiParSimulator::RecursiveBisectionPartition<3> > sim(
         init,
         MPILayer().rank() ? 0 : new TracingBalancer(new NoOpBalancer()),
         maxSteps,
@@ -284,7 +329,7 @@ void runSimulation()
 
     if (MPILayer().rank() == 0) {
         sim.addWriter(
-            new TracingWriter<NBodyContainer>(outputFrequency, init->maxSteps()));
+            new TracingWriter<CELL>(outputFrequency, init->maxSteps()));
     }
 
     long long tStart = Chronometer::timeUSec();
@@ -296,20 +341,20 @@ void runSimulation()
         // time steps * grid size
         1.0 * maxSteps * dim.prod() *
         // interactions per container update
-        27 * CONTAINER_SIZE * CONTAINER_SIZE *
+        27 * CELL::SIZE * CELL::SIZE *
         // FLOPs per interaction
         (3 + 6 + 1 + 6);
     double gflops = 1e-9 * flops / seconds;
     std::cout << "GFLOPS: " << gflops << "\n";
 }
 
-
 int main(int argc, char **argv)
 {
     MPI_Init(&argc, &argv);
     Typemaps::initializeMaps();
 
-    runSimulation();
+    runSimulation<NBodyContainer<512, float, InteractorSSE<512> > >();
+    // runSimulation<NBodyContainer<512, float, InteractorSSESwapped<512> > >();
 
     MPI_Finalize();
     return 0;
