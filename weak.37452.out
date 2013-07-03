@@ -1,0 +1,21 @@
+go go, powerrangers!
+ranks: 32768
+dim: (479, 479, 479)
+TracingWriter::initialized()
+  time: 2013-Jun-29 16:35:07.353240
+TracingWriter::stepFinished()
+  step: 1 of 200
+  elapsed: 00:05:31.263246
+  remaining: 18:18:41.385954
+  ETA:  2013-Jun-30 10:59:20.001843
+  speed: 0.000331767 GLUPS
+  effective memory bandwidth 4.07675 GB/s
+  time: 2013-Jun-29 16:40:38.622051
+2013-06-29 16:44:15.782 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: received signal 24
+2013-06-29 16:44:15.782 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: signal sent from USER
+2013-06-29 16:44:15.782 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: sent from pid 2144
+2013-06-29 16:44:15.783 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: could not read /proc/2144/exe
+2013-06-29 16:44:15.783 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: Permission denied
+2013-06-29 16:44:15.783 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: sent from uid 0 (root)
+2013-06-29 16:44:17.879 (WARN ) [0x40000fd8c80] :499509:ibm.runjob.client.Job: terminated by signal 9
+2013-06-29 16:44:17.879 (WARN ) [0x40000fd8c80] :499509:ibm.runjob.client.Job: abnormal termination by signal 9 from rank 6787

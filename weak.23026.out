@@ -1,0 +1,8 @@
+go go, powerrangers!
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+2013-06-29 14:03:45.339 (WARN ) [0x40000fd8c80] :498873:ibm.runjob.client.Job: terminated by signal 6
+2013-06-29 14:03:45.339 (WARN ) [0x40000fd8c80] :498873:ibm.runjob.client.Job: abnormal termination by signal 6 from rank 30431
+2013-06-29 14:03:45.339 (WARN ) [0x40000fd8c80] :498873:ibm.runjob.client.Job: 1 RAS event
+2013-06-29 14:03:45.340 (WARN ) [0x40000fd8c80] :498873:ibm.runjob.client.Job: most recent RAS event text: DDR Correctable Error Summary : count=229 MCFIR error status:  [MEMORY_CE] This bit is set when a memory CE is detected on a non-maintenance memory read op;
+done

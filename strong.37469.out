@@ -1,0 +1,119 @@
+go go, powerrangers!
+ranks: 4096
+dim: (90, 90, 90)
+TracingWriter::initialized()
+  time: 2013-Jun-29 16:32:59.054811
+TracingWriter::stepFinished()
+  step: 2 of 200
+  elapsed: 00:00:31.408472
+  remaining: 00:51:49.438728
+  ETA:  2013-Jun-29 17:25:19.901539
+  speed: 4.64206e-05 GLUPS
+  effective memory bandwidth 0.570416 GB/s
+  time: 2013-Jun-29 16:33:30.467783
+TracingWriter::stepFinished()
+  step: 4 of 200
+  elapsed: 00:01:12.441125
+  remaining: 00:59:09.615125
+  ETA:  2013-Jun-29 17:33:21.110589
+  speed: 4.02534e-05 GLUPS
+  effective memory bandwidth 0.494634 GB/s
+  time: 2013-Jun-29 16:34:11.500152
+TracingWriter::stepFinished()
+  step: 6 of 200
+  elapsed: 00:01:56.301330
+  remaining: 01:02:40.409670
+  ETA:  2013-Jun-29 17:37:35.765339
+  speed: 3.76092e-05 GLUPS
+  effective memory bandwidth 0.462142 GB/s
+  time: 2013-Jun-29 16:34:55.360158
+TracingWriter::stepFinished()
+  step: 8 of 200
+  elapsed: 00:02:40.184295
+  remaining: 01:04:04.423080
+  ETA:  2013-Jun-29 17:39:43.661714
+  speed: 3.64081e-05 GLUPS
+  effective memory bandwidth 0.447382 GB/s
+  time: 2013-Jun-29 16:35:39.241764
+TracingWriter::stepFinished()
+  step: 10 of 200
+  elapsed: 00:03:24.197916
+  remaining: 01:04:39.760404
+  ETA:  2013-Jun-29 17:41:03.012659
+  speed: 3.57007e-05 GLUPS
+  effective memory bandwidth 0.43869 GB/s
+  time: 2013-Jun-29 16:36:23.255439
+TracingWriter::stepFinished()
+  step: 12 of 200
+  elapsed: 00:04:08.236514
+  remaining: 01:04:49.038719
+  ETA:  2013-Jun-29 17:41:56.329572
+  speed: 3.52406e-05 GLUPS
+  effective memory bandwidth 0.433036 GB/s
+  time: 2013-Jun-29 16:37:07.294036
+TracingWriter::stepFinished()
+  step: 14 of 200
+  elapsed: 00:04:52.156630
+  remaining: 01:04:41.509512
+  ETA:  2013-Jun-29 17:42:32.720481
+  speed: 3.49333e-05 GLUPS
+  effective memory bandwidth 0.429261 GB/s
+  time: 2013-Jun-29 16:37:51.214242
+TracingWriter::stepFinished()
+  step: 16 of 200
+  elapsed: 00:05:36.137323
+  remaining: 01:04:25.579214
+  ETA:  2013-Jun-29 17:43:00.770876
+  speed: 3.47001e-05 GLUPS
+  effective memory bandwidth 0.426395 GB/s
+  time: 2013-Jun-29 16:38:35.195083
+TracingWriter::stepFinished()
+  step: 18 of 200
+  elapsed: 00:06:20.166615
+  remaining: 01:04:03.906885
+  ETA:  2013-Jun-29 17:43:23.127839
+  speed: 3.45164e-05 GLUPS
+  effective memory bandwidth 0.424138 GB/s
+  time: 2013-Jun-29 16:39:19.224230
+TracingWriter::stepFinished()
+  step: 20 of 200
+  elapsed: 00:07:04.209248
+  remaining: 01:03:37.883232
+  ETA:  2013-Jun-29 17:43:41.146819
+  speed: 3.43698e-05 GLUPS
+  effective memory bandwidth 0.422336 GB/s
+  time: 2013-Jun-29 16:40:03.268805
+TracingWriter::stepFinished()
+  step: 22 of 200
+  elapsed: 00:07:48.144636
+  remaining: 01:03:07.715691
+  ETA:  2013-Jun-29 17:43:54.914666
+  speed: 3.42586e-05 GLUPS
+  effective memory bandwidth 0.42097 GB/s
+  time: 2013-Jun-29 16:40:47.202138
+TracingWriter::stepFinished()
+  step: 24 of 200
+  elapsed: 00:08:32.175282
+  remaining: 01:02:35.952068
+  ETA:  2013-Jun-29 17:44:07.181689
+  speed: 3.41602e-05 GLUPS
+  effective memory bandwidth 0.41976 GB/s
+  time: 2013-Jun-29 16:41:31.232604
+TracingWriter::stepFinished()
+  step: 26 of 200
+  elapsed: 00:09:16.182816
+  remaining: 01:02:02.146537
+  ETA:  2013-Jun-29 17:44:17.383692
+  speed: 3.40787e-05 GLUPS
+  effective memory bandwidth 0.418759 GB/s
+  time: 2013-Jun-29 16:42:15.240465
+2013-06-29 16:42:40.340 (WARN ) [0x400011d8c80] :ibm.runjob.LogSignalInfo: received signal 24
+2013-06-29 16:42:40.340 (WARN ) [0x400011d8c80] :ibm.runjob.LogSignalInfo: signal sent from USER
+2013-06-29 16:42:40.340 (WARN ) [0x400011d8c80] :ibm.runjob.LogSignalInfo: sent from pid 29178
+2013-06-29 16:42:40.340 (WARN ) [0x400011d8c80] :ibm.runjob.LogSignalInfo: could not read /proc/29178/exe
+2013-06-29 16:42:40.341 (WARN ) [0x400011d8c80] :ibm.runjob.LogSignalInfo: Permission denied
+2013-06-29 16:42:40.341 (WARN ) [0x400011d8c80] :ibm.runjob.LogSignalInfo: sent from uid 0 (root)
+2013-06-29 16:42:41.689 (WARN ) [0x400011d8c80] :499480:ibm.runjob.client.Job: terminated by signal 9
+2013-06-29 16:42:41.689 (WARN ) [0x400011d8c80] :499480:ibm.runjob.client.Job: abnormal termination by signal 9 from rank 1222
+2013-06-29 16:42:41.690 (WARN ) [0x400011d8c80] :499480:ibm.runjob.client.Job: 1 RAS event
+2013-06-29 16:42:41.690 (WARN ) [0x400011d8c80] :499480:ibm.runjob.client.Job: most recent RAS event text: DDR Correctable Error Summary : count=231 MCFIR error status:  [MEMORY_CE] This bit is set when a memory CE is detected on a non-maintenance memory read op;

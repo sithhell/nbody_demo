@@ -1,0 +1,23 @@
+go go, powerrangers!
+ranks: 65536
+dim: (604, 604, 604)
+TracingWriter::initialized()
+  time: 2013-Jun-29 17:20:47.887620
+TracingWriter::stepFinished()
+  step: 1 of 200
+  elapsed: 00:06:17.312163
+  remaining: 20:51:25.120437
+  ETA:  2013-Jun-30 14:18:30.319617
+  speed: 0.000583996 GLUPS
+  effective memory bandwidth 7.17615 GB/s
+  time: 2013-Jun-29 17:27:05.203285
+2013-06-29 17:29:54.876 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: received signal 24
+2013-06-29 17:29:54.876 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: signal sent from USER
+2013-06-29 17:29:54.876 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: sent from pid 3039
+2013-06-29 17:29:54.877 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: could not read /proc/3039/exe
+2013-06-29 17:29:54.877 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: Permission denied
+2013-06-29 17:29:54.877 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: sent from uid 0 (root)
+2013-06-29 17:29:56.985 (WARN ) [0x40000fd8c80] :500881:ibm.runjob.client.Job: terminated by signal 9
+2013-06-29 17:29:56.986 (WARN ) [0x40000fd8c80] :500881:ibm.runjob.client.Job: abnormal termination by signal 9 from rank 44035
+2013-06-29 17:29:56.986 (WARN ) [0x40000fd8c80] :500881:ibm.runjob.client.Job: 5 RAS events
+2013-06-29 17:29:56.986 (WARN ) [0x40000fd8c80] :500881:ibm.runjob.client.Job: most recent RAS event text: DDR Maintenance Correctable Error Summary : count=104 MCFIR error status:  [ECC_ERROR_COUNTER_THRESHOLD_REACHED] ;
