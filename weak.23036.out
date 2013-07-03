@@ -1,0 +1,8 @@
+go go, powerrangers!
+terminate called after throwing an instance of 'terminate called after throwing an instance of 'std::bad_allocstd::bad_alloc'
+'
+  what():    what():  std::bad_allocstd::bad_alloc
+
+2013-06-29 14:29:05.644 (WARN ) [0x400011d8c80] :498896:ibm.runjob.client.Job: terminated by signal 6
+2013-06-29 14:29:05.645 (WARN ) [0x400011d8c80] :498896:ibm.runjob.client.Job: abnormal termination by signal 6 from rank 13018
+done

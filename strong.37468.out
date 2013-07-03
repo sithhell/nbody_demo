@@ -1,0 +1,791 @@
+go go, powerrangers!
+ranks: 32768
+dim: (90, 90, 90)
+TracingWriter::initialized()
+  time: 2013-Jun-29 16:39:14.550505
+TracingWriter::stepFinished()
+  step: 2 of 200
+  elapsed: 00:00:05.413492
+  remaining: 00:08:55.935708
+  ETA:  2013-Jun-29 16:48:15.899262
+  speed: 0.000269327 GLUPS
+  effective memory bandwidth 3.30949 GB/s
+  time: 2013-Jun-29 16:39:19.967579
+TracingWriter::stepFinished()
+  step: 4 of 200
+  elapsed: 00:00:10.792825
+  remaining: 00:08:48.848425
+  ETA:  2013-Jun-29 16:48:14.191312
+  speed: 0.000270179 GLUPS
+  effective memory bandwidth 3.31997 GB/s
+  time: 2013-Jun-29 16:39:25.346081
+TracingWriter::stepFinished()
+  step: 6 of 200
+  elapsed: 00:00:16.241671
+  remaining: 00:08:45.147362
+  ETA:  2013-Jun-29 16:48:15.939095
+  speed: 0.000269307 GLUPS
+  effective memory bandwidth 3.30925 GB/s
+  time: 2013-Jun-29 16:39:30.795435
+TracingWriter::stepFinished()
+  step: 8 of 200
+  elapsed: 00:00:21.906348
+  remaining: 00:08:45.752352
+  ETA:  2013-Jun-29 16:48:22.208762
+  speed: 0.000266224 GLUPS
+  effective memory bandwidth 3.27136 GB/s
+  time: 2013-Jun-29 16:39:36.459596
+TracingWriter::stepFinished()
+  step: 10 of 200
+  elapsed: 00:00:27.532021
+  remaining: 00:08:43.108399
+  ETA:  2013-Jun-29 16:48:25.190482
+  speed: 0.000264783 GLUPS
+  effective memory bandwidth 3.25365 GB/s
+  time: 2013-Jun-29 16:39:42.085678
+TracingWriter::stepFinished()
+  step: 12 of 200
+  elapsed: 00:00:33.144385
+  remaining: 00:08:39.262031
+  ETA:  2013-Jun-29 16:48:26.956478
+  speed: 0.000263936 GLUPS
+  effective memory bandwidth 3.24325 GB/s
+  time: 2013-Jun-29 16:39:47.697635
+TracingWriter::stepFinished()
+  step: 14 of 200
+  elapsed: 00:00:38.763340
+  remaining: 00:08:34.998660
+  ETA:  2013-Jun-29 16:48:28.312062
+  speed: 0.00026329 GLUPS
+  effective memory bandwidth 3.23531 GB/s
+  time: 2013-Jun-29 16:39:53.316616
+TracingWriter::stepFinished()
+  step: 16 of 200
+  elapsed: 00:00:44.392690
+  remaining: 00:08:30.515935
+  ETA:  2013-Jun-29 16:48:29.458687
+  speed: 0.000262746 GLUPS
+  effective memory bandwidth 3.22862 GB/s
+  time: 2013-Jun-29 16:39:58.945942
+TracingWriter::stepFinished()
+  step: 18 of 200
+  elapsed: 00:00:50.038520
+  remaining: 00:08:25.945035
+  ETA:  2013-Jun-29 16:48:30.533617
+  speed: 0.000262238 GLUPS
+  effective memory bandwidth 3.22238 GB/s
+  time: 2013-Jun-29 16:40:04.591798
+TracingWriter::stepFinished()
+  step: 20 of 200
+  elapsed: 00:00:55.710315
+  remaining: 00:08:21.392835
+  ETA:  2013-Jun-29 16:48:31.653212
+  speed: 0.000261711 GLUPS
+  effective memory bandwidth 3.2159 GB/s
+  time: 2013-Jun-29 16:40:10.263971
+TracingWriter::stepFinished()
+  step: 22 of 200
+  elapsed: 00:01:01.362116
+  remaining: 00:08:16.475302
+  ETA:  2013-Jun-29 16:48:32.387480
+  speed: 0.000261366 GLUPS
+  effective memory bandwidth 3.21167 GB/s
+  time: 2013-Jun-29 16:40:15.915823
+TracingWriter::stepFinished()
+  step: 24 of 200
+  elapsed: 00:01:07.042285
+  remaining: 00:08:11.643423
+  ETA:  2013-Jun-29 16:48:33.235770
+  speed: 0.00026097 GLUPS
+  effective memory bandwidth 3.20679 GB/s
+  time: 2013-Jun-29 16:40:21.595946
+TracingWriter::stepFinished()
+  step: 26 of 200
+  elapsed: 00:01:12.716452
+  remaining: 00:08:06.640871
+  ETA:  2013-Jun-29 16:48:33.907385
+  speed: 0.000260656 GLUPS
+  effective memory bandwidth 3.20294 GB/s
+  time: 2013-Jun-29 16:40:27.269716
+TracingWriter::stepFinished()
+  step: 28 of 200
+  elapsed: 00:01:18.385652
+  remaining: 00:08:01.511862
+  ETA:  2013-Jun-29 16:48:34.447576
+  speed: 0.000260405 GLUPS
+  effective memory bandwidth 3.19985 GB/s
+  time: 2013-Jun-29 16:40:32.938996
+TracingWriter::stepFinished()
+  step: 30 of 200
+  elapsed: 00:01:24.042873
+  remaining: 00:07:56.242947
+  ETA:  2013-Jun-29 16:48:34.835882
+  speed: 0.000260224 GLUPS
+  effective memory bandwidth 3.19764 GB/s
+  time: 2013-Jun-29 16:40:38.596124
+TracingWriter::stepFinished()
+  step: 32 of 200
+  elapsed: 00:01:29.712200
+  remaining: 00:07:50.989050
+  ETA:  2013-Jun-29 16:48:35.251312
+  speed: 0.000260032 GLUPS
+  effective memory bandwidth 3.19527 GB/s
+  time: 2013-Jun-29 16:40:44.265890
+TracingWriter::stepFinished()
+  step: 34 of 200
+  elapsed: 00:01:35.383156
+  remaining: 00:07:45.694232
+  ETA:  2013-Jun-29 16:48:35.627450
+  speed: 0.000259857 GLUPS
+  effective memory bandwidth 3.19313 GB/s
+  time: 2013-Jun-29 16:40:49.936351
+TracingWriter::stepFinished()
+  step: 36 of 200
+  elapsed: 00:01:41.038074
+  remaining: 00:07:40.284559
+  ETA:  2013-Jun-29 16:48:35.872695
+  speed: 0.000259744 GLUPS
+  effective memory bandwidth 3.19173 GB/s
+  time: 2013-Jun-29 16:40:55.591340
+TracingWriter::stepFinished()
+  step: 38 of 200
+  elapsed: 00:01:46.702735
+  remaining: 00:07:34.890607
+  ETA:  2013-Jun-29 16:48:36.143404
+  speed: 0.000259618 GLUPS
+  effective memory bandwidth 3.19019 GB/s
+  time: 2013-Jun-29 16:41:01.255981
+TracingWriter::stepFinished()
+  step: 40 of 200
+  elapsed: 00:01:52.371665
+  remaining: 00:07:29.486660
+  ETA:  2013-Jun-29 16:48:36.408387
+  speed: 0.000259496 GLUPS
+  effective memory bandwidth 3.18869 GB/s
+  time: 2013-Jun-29 16:41:06.925324
+TracingWriter::stepFinished()
+  step: 42 of 200
+  elapsed: 00:01:58.044090
+  remaining: 00:07:24.070624
+  ETA:  2013-Jun-29 16:48:36.664776
+  speed: 0.000259378 GLUPS
+  effective memory bandwidth 3.18723 GB/s
+  time: 2013-Jun-29 16:41:12.597359
+TracingWriter::stepFinished()
+  step: 44 of 200
+  elapsed: 00:02:03.710218
+  remaining: 00:07:18.608954
+  ETA:  2013-Jun-29 16:48:36.869234
+  speed: 0.000259283 GLUPS
+  effective memory bandwidth 3.18607 GB/s
+  time: 2013-Jun-29 16:41:18.263847
+TracingWriter::stepFinished()
+  step: 46 of 200
+  elapsed: 00:02:09.382494
+  remaining: 00:07:13.150088
+  ETA:  2013-Jun-29 16:48:37.082644
+  speed: 0.000259185 GLUPS
+  effective memory bandwidth 3.18487 GB/s
+  time: 2013-Jun-29 16:41:23.936249
+TracingWriter::stepFinished()
+  step: 48 of 200
+  elapsed: 00:02:15.050251
+  remaining: 00:07:07.659128
+  ETA:  2013-Jun-29 16:48:37.259441
+  speed: 0.000259104 GLUPS
+  effective memory bandwidth 3.18386 GB/s
+  time: 2013-Jun-29 16:41:29.603853
+TracingWriter::stepFinished()
+  step: 50 of 200
+  elapsed: 00:02:20.718914
+  remaining: 00:07:02.156742
+  ETA:  2013-Jun-29 16:48:37.425718
+  speed: 0.000259027 GLUPS
+  effective memory bandwidth 3.18292 GB/s
+  time: 2013-Jun-29 16:41:35.272228
+TracingWriter::stepFinished()
+  step: 52 of 200
+  elapsed: 00:02:26.385128
+  remaining: 00:06:56.634595
+  ETA:  2013-Jun-29 16:48:37.569785
+  speed: 0.000258961 GLUPS
+  effective memory bandwidth 3.18211 GB/s
+  time: 2013-Jun-29 16:41:40.938468
+TracingWriter::stepFinished()
+  step: 54 of 200
+  elapsed: 00:02:32.055436
+  remaining: 00:06:51.112845
+  ETA:  2013-Jun-29 16:48:37.718343
+  speed: 0.000258892 GLUPS
+  effective memory bandwidth 3.18127 GB/s
+  time: 2013-Jun-29 16:41:46.608722
+TracingWriter::stepFinished()
+  step: 56 of 200
+  elapsed: 00:02:37.720212
+  remaining: 00:06:45.566259
+  ETA:  2013-Jun-29 16:48:37.836533
+  speed: 0.000258838 GLUPS
+  effective memory bandwidth 3.1806 GB/s
+  time: 2013-Jun-29 16:41:52.273871
+TracingWriter::stepFinished()
+  step: 58 of 200
+  elapsed: 00:02:43.390883
+  remaining: 00:06:40.025954
+  ETA:  2013-Jun-29 16:48:37.966899
+  speed: 0.000258778 GLUPS
+  effective memory bandwidth 3.17987 GB/s
+  time: 2013-Jun-29 16:41:57.944267
+TracingWriter::stepFinished()
+  step: 60 of 200
+  elapsed: 00:02:49.057416
+  remaining: 00:06:34.467304
+  ETA:  2013-Jun-29 16:48:38.074782
+  speed: 0.000258729 GLUPS
+  effective memory bandwidth 3.17926 GB/s
+  time: 2013-Jun-29 16:42:03.610665
+TracingWriter::stepFinished()
+  step: 62 of 200
+  elapsed: 00:02:54.730217
+  remaining: 00:06:28.915644
+  ETA:  2013-Jun-29 16:48:38.195923
+  speed: 0.000258673 GLUPS
+  effective memory bandwidth 3.17857 GB/s
+  time: 2013-Jun-29 16:42:09.283851
+TracingWriter::stepFinished()
+  step: 64 of 200
+  elapsed: 00:03:00.401867
+  remaining: 00:06:23.353967
+  ETA:  2013-Jun-29 16:48:38.305896
+  speed: 0.000258623 GLUPS
+  effective memory bandwidth 3.17795 GB/s
+  time: 2013-Jun-29 16:42:14.955293
+TracingWriter::stepFinished()
+  step: 66 of 200
+  elapsed: 00:03:06.062849
+  remaining: 00:06:17.763966
+  ETA:  2013-Jun-29 16:48:38.376877
+  speed: 0.00025859 GLUPS
+  effective memory bandwidth 3.17755 GB/s
+  time: 2013-Jun-29 16:42:20.616125
+TracingWriter::stepFinished()
+  step: 68 of 200
+  elapsed: 00:03:11.736078
+  remaining: 00:06:12.193563
+  ETA:  2013-Jun-29 16:48:38.479703
+  speed: 0.000258543 GLUPS
+  effective memory bandwidth 3.17698 GB/s
+  time: 2013-Jun-29 16:42:26.289427
+TracingWriter::stepFinished()
+  step: 70 of 200
+  elapsed: 00:03:17.400323
+  remaining: 00:06:06.600599
+  ETA:  2013-Jun-29 16:48:38.550984
+  speed: 0.00025851 GLUPS
+  effective memory bandwidth 3.17657 GB/s
+  time: 2013-Jun-29 16:42:31.953871
+TracingWriter::stepFinished()
+  step: 72 of 200
+  elapsed: 00:03:23.068427
+  remaining: 00:06:01.010536
+  ETA:  2013-Jun-29 16:48:38.629025
+  speed: 0.000258474 GLUPS
+  effective memory bandwidth 3.17613 GB/s
+  time: 2013-Jun-29 16:42:37.621790
+TracingWriter::stepFinished()
+  step: 74 of 200
+  elapsed: 00:03:28.735116
+  remaining: 00:05:55.413846
+  ETA:  2013-Jun-29 16:48:38.699024
+  speed: 0.000258442 GLUPS
+  effective memory bandwidth 3.17574 GB/s
+  time: 2013-Jun-29 16:42:43.288424
+TracingWriter::stepFinished()
+  step: 76 of 200
+  elapsed: 00:03:34.406247
+  remaining: 00:05:49.820718
+  ETA:  2013-Jun-29 16:48:38.777027
+  speed: 0.000258407 GLUPS
+  effective memory bandwidth 3.1753 GB/s
+  time: 2013-Jun-29 16:42:48.959590
+TracingWriter::stepFinished()
+  step: 78 of 200
+  elapsed: 00:03:40.074443
+  remaining: 00:05:44.219000
+  ETA:  2013-Jun-29 16:48:38.843505
+  speed: 0.000258376 GLUPS
+  effective memory bandwidth 3.17493 GB/s
+  time: 2013-Jun-29 16:42:54.627641
+TracingWriter::stepFinished()
+  step: 80 of 200
+  elapsed: 00:03:45.746439
+  remaining: 00:05:38.619658
+  ETA:  2013-Jun-29 16:48:38.916159
+  speed: 0.000258343 GLUPS
+  effective memory bandwidth 3.17452 GB/s
+  time: 2013-Jun-29 16:43:00.299721
+TracingWriter::stepFinished()
+  step: 82 of 200
+  elapsed: 00:03:51.411872
+  remaining: 00:05:33.007328
+  ETA:  2013-Jun-29 16:48:38.969262
+  speed: 0.000258319 GLUPS
+  effective memory bandwidth 3.17422 GB/s
+  time: 2013-Jun-29 16:43:05.965550
+TracingWriter::stepFinished()
+  step: 84 of 200
+  elapsed: 00:03:57.083615
+  remaining: 00:05:27.401182
+  ETA:  2013-Jun-29 16:48:39.034859
+  speed: 0.000258289 GLUPS
+  effective memory bandwidth 3.17385 GB/s
+  time: 2013-Jun-29 16:43:11.636867
+TracingWriter::stepFinished()
+  step: 86 of 200
+  elapsed: 00:04:02.755618
+  remaining: 00:05:21.792330
+  ETA:  2013-Jun-29 16:48:39.098010
+  speed: 0.00025826 GLUPS
+  effective memory bandwidth 3.1735 GB/s
+  time: 2013-Jun-29 16:43:17.308929
+TracingWriter::stepFinished()
+  step: 88 of 200
+  elapsed: 00:04:08.420697
+  remaining: 00:05:16.171796
+  ETA:  2013-Jun-29 16:48:39.142555
+  speed: 0.000258239 GLUPS
+  effective memory bandwidth 3.17325 GB/s
+  time: 2013-Jun-29 16:43:22.974358
+TracingWriter::stepFinished()
+  step: 90 of 200
+  elapsed: 00:04:14.086818
+  remaining: 00:05:10.550555
+  ETA:  2013-Jun-29 16:48:39.187435
+  speed: 0.000258219 GLUPS
+  effective memory bandwidth 3.17299 GB/s
+  time: 2013-Jun-29 16:43:28.640146
+TracingWriter::stepFinished()
+  step: 92 of 200
+  elapsed: 00:04:19.755466
+  remaining: 00:05:04.930329
+  ETA:  2013-Jun-29 16:48:39.235857
+  speed: 0.000258197 GLUPS
+  effective memory bandwidth 3.17272 GB/s
+  time: 2013-Jun-29 16:43:34.308718
+TracingWriter::stepFinished()
+  step: 94 of 200
+  elapsed: 00:04:25.426769
+  remaining: 00:04:59.311037
+  ETA:  2013-Jun-29 16:48:39.287868
+  speed: 0.000258173 GLUPS
+  effective memory bandwidth 3.17243 GB/s
+  time: 2013-Jun-29 16:43:39.980059
+TracingWriter::stepFinished()
+  step: 96 of 200
+  elapsed: 00:04:31.092692
+  remaining: 00:04:53.683749
+  ETA:  2013-Jun-29 16:48:39.326503
+  speed: 0.000258155 GLUPS
+  effective memory bandwidth 3.17221 GB/s
+  time: 2013-Jun-29 16:43:45.646408
+TracingWriter::stepFinished()
+  step: 98 of 200
+  elapsed: 00:04:36.762032
+  remaining: 00:04:48.058441
+  ETA:  2013-Jun-29 16:48:39.370535
+  speed: 0.000258135 GLUPS
+  effective memory bandwidth 3.17196 GB/s
+  time: 2013-Jun-29 16:43:51.315418
+TracingWriter::stepFinished()
+  step: 100 of 200
+  elapsed: 00:04:42.432930
+  remaining: 00:04:42.432930
+  ETA:  2013-Jun-29 16:48:39.415922
+  speed: 0.000258114 GLUPS
+  effective memory bandwidth 3.17171 GB/s
+  time: 2013-Jun-29 16:43:56.986182
+TracingWriter::stepFinished()
+  step: 102 of 200
+  elapsed: 00:04:48.108964
+  remaining: 00:04:36.810573
+  ETA:  2013-Jun-29 16:48:39.469599
+  speed: 0.00025809 GLUPS
+  effective memory bandwidth 3.17141 GB/s
+  time: 2013-Jun-29 16:44:02.662238
+TracingWriter::stepFinished()
+  step: 104 of 200
+  elapsed: 00:04:53.764331
+  remaining: 00:04:31.167074
+  ETA:  2013-Jun-29 16:48:39.481467
+  speed: 0.000258084 GLUPS
+  effective memory bandwidth 3.17134 GB/s
+  time: 2013-Jun-29 16:44:08.317587
+TracingWriter::stepFinished()
+  step: 106 of 200
+  elapsed: 00:04:59.436910
+  remaining: 00:04:25.538391
+  ETA:  2013-Jun-29 16:48:39.525363
+  speed: 0.000258064 GLUPS
+  effective memory bandwidth 3.1711 GB/s
+  time: 2013-Jun-29 16:44:13.990187
+TracingWriter::stepFinished()
+  step: 108 of 200
+  elapsed: 00:05:05.109411
+  remaining: 00:04:19.908016
+  ETA:  2013-Jun-29 16:48:39.567489
+  speed: 0.000258045 GLUPS
+  effective memory bandwidth 3.17086 GB/s
+  time: 2013-Jun-29 16:44:19.662739
+TracingWriter::stepFinished()
+  step: 110 of 200
+  elapsed: 00:05:10.768086
+  remaining: 00:04:14.264797
+  ETA:  2013-Jun-29 16:48:39.582945
+  speed: 0.000258038 GLUPS
+  effective memory bandwidth 3.17077 GB/s
+  time: 2013-Jun-29 16:44:25.321345
+TracingWriter::stepFinished()
+  step: 112 of 200
+  elapsed: 00:05:16.439956
+  remaining: 00:04:08.631394
+  ETA:  2013-Jun-29 16:48:39.621412
+  speed: 0.000258021 GLUPS
+  effective memory bandwidth 3.17056 GB/s
+  time: 2013-Jun-29 16:44:30.993716
+TracingWriter::stepFinished()
+  step: 114 of 200
+  elapsed: 00:05:22.107114
+  remaining: 00:04:02.993086
+  ETA:  2013-Jun-29 16:48:39.650262
+  speed: 0.000258007 GLUPS
+  effective memory bandwidth 3.17039 GB/s
+  time: 2013-Jun-29 16:44:36.660381
+TracingWriter::stepFinished()
+  step: 116 of 200
+  elapsed: 00:05:27.775457
+  remaining: 00:03:57.354641
+  ETA:  2013-Jun-29 16:48:39.680160
+  speed: 0.000257994 GLUPS
+  effective memory bandwidth 3.17023 GB/s
+  time: 2013-Jun-29 16:44:42.328741
+TracingWriter::stepFinished()
+  step: 118 of 200
+  elapsed: 00:05:33.436478
+  remaining: 00:03:51.710094
+  ETA:  2013-Jun-29 16:48:39.696634
+  speed: 0.000257986 GLUPS
+  effective memory bandwidth 3.17013 GB/s
+  time: 2013-Jun-29 16:44:47.989738
+TracingWriter::stepFinished()
+  step: 120 of 200
+  elapsed: 00:05:39.103135
+  remaining: 00:03:46.068756
+  ETA:  2013-Jun-29 16:48:39.721953
+  speed: 0.000257975 GLUPS
+  effective memory bandwidth 3.16999 GB/s
+  time: 2013-Jun-29 16:44:53.656416
+TracingWriter::stepFinished()
+  step: 122 of 200
+  elapsed: 00:05:44.768394
+  remaining: 00:03:40.425694
+  ETA:  2013-Jun-29 16:48:39.744150
+  speed: 0.000257964 GLUPS
+  effective memory bandwidth 3.16987 GB/s
+  time: 2013-Jun-29 16:44:59.321666
+TracingWriter::stepFinished()
+  step: 124 of 200
+  elapsed: 00:05:50.377788
+  remaining: 00:03:34.747676
+  ETA:  2013-Jun-29 16:48:39.675526
+  speed: 0.000257996 GLUPS
+  effective memory bandwidth 3.17025 GB/s
+  time: 2013-Jun-29 16:45:04.931073
+TracingWriter::stepFinished()
+  step: 126 of 200
+  elapsed: 00:05:55.984693
+  remaining: 00:03:29.070375
+  ETA:  2013-Jun-29 16:48:39.605130
+  speed: 0.000258028 GLUPS
+  effective memory bandwidth 3.17065 GB/s
+  time: 2013-Jun-29 16:45:10.537949
+TracingWriter::stepFinished()
+  step: 128 of 200
+  elapsed: 00:06:01.637195
+  remaining: 00:03:23.420922
+  ETA:  2013-Jun-29 16:48:39.608179
+  speed: 0.000258027 GLUPS
+  effective memory bandwidth 3.17063 GB/s
+  time: 2013-Jun-29 16:45:16.190459
+TracingWriter::stepFinished()
+  step: 130 of 200
+  elapsed: 00:06:07.303985
+  remaining: 00:03:17.779068
+  ETA:  2013-Jun-29 16:48:39.633115
+  speed: 0.000258015 GLUPS
+  effective memory bandwidth 3.17049 GB/s
+  time: 2013-Jun-29 16:45:21.857252
+TracingWriter::stepFinished()
+  step: 132 of 200
+  elapsed: 00:06:12.977039
+  remaining: 00:03:12.139686
+  ETA:  2013-Jun-29 16:48:39.666787
+  speed: 0.000258 GLUPS
+  effective memory bandwidth 3.1703 GB/s
+  time: 2013-Jun-29 16:45:27.530300
+TracingWriter::stepFinished()
+  step: 134 of 200
+  elapsed: 00:06:18.603174
+  remaining: 00:03:06.476190
+  ETA:  2013-Jun-29 16:48:39.629426
+  speed: 0.000258017 GLUPS
+  effective memory bandwidth 3.17051 GB/s
+  time: 2013-Jun-29 16:45:33.156427
+TracingWriter::stepFinished()
+  step: 136 of 200
+  elapsed: 00:06:24.227417
+  remaining: 00:03:00.812902
+  ETA:  2013-Jun-29 16:48:39.590381
+  speed: 0.000258035 GLUPS
+  effective memory bandwidth 3.17073 GB/s
+  time: 2013-Jun-29 16:45:38.780667
+TracingWriter::stepFinished()
+  step: 138 of 200
+  elapsed: 00:06:29.834122
+  remaining: 00:02:55.142866
+  ETA:  2013-Jun-29 16:48:39.527050
+  speed: 0.000258064 GLUPS
+  effective memory bandwidth 3.17109 GB/s
+  time: 2013-Jun-29 16:45:44.387383
+TracingWriter::stepFinished()
+  step: 140 of 200
+  elapsed: 00:06:35.457674
+  remaining: 00:02:49.481860
+  ETA:  2013-Jun-29 16:48:39.489596
+  speed: 0.000258081 GLUPS
+  effective memory bandwidth 3.1713 GB/s
+  time: 2013-Jun-29 16:45:50.010919
+TracingWriter::stepFinished()
+  step: 142 of 200
+  elapsed: 00:06:41.072691
+  remaining: 00:02:43.818423
+  ETA:  2013-Jun-29 16:48:39.441176
+  speed: 0.000258103 GLUPS
+  effective memory bandwidth 3.17157 GB/s
+  time: 2013-Jun-29 16:45:55.626402
+TracingWriter::stepFinished()
+  step: 144 of 200
+  elapsed: 00:06:46.692809
+  remaining: 00:02:38.158314
+  ETA:  2013-Jun-29 16:48:39.401185
+  speed: 0.000258121 GLUPS
+  effective memory bandwidth 3.17179 GB/s
+  time: 2013-Jun-29 16:46:01.246464
+TracingWriter::stepFinished()
+  step: 146 of 200
+  elapsed: 00:06:52.304703
+  remaining: 00:02:32.496260
+  ETA:  2013-Jun-29 16:48:39.351025
+  speed: 0.000258144 GLUPS
+  effective memory bandwidth 3.17207 GB/s
+  time: 2013-Jun-29 16:46:06.857941
+TracingWriter::stepFinished()
+  step: 148 of 200
+  elapsed: 00:06:57.936668
+  remaining: 00:02:26.842613
+  ETA:  2013-Jun-29 16:48:39.329343
+  speed: 0.000258154 GLUPS
+  effective memory bandwidth 3.1722 GB/s
+  time: 2013-Jun-29 16:46:12.489917
+TracingWriter::stepFinished()
+  step: 150 of 200
+  elapsed: 00:07:03.554639
+  remaining: 00:02:21.184879
+  ETA:  2013-Jun-29 16:48:39.289580
+  speed: 0.000258172 GLUPS
+  effective memory bandwidth 3.17242 GB/s
+  time: 2013-Jun-29 16:46:18.107896
+TracingWriter::stepFinished()
+  step: 152 of 200
+  elapsed: 00:07:09.171883
+  remaining: 00:02:15.527963
+  ETA:  2013-Jun-29 16:48:39.249908
+  speed: 0.00025819 GLUPS
+  effective memory bandwidth 3.17264 GB/s
+  time: 2013-Jun-29 16:46:23.725442
+TracingWriter::stepFinished()
+  step: 154 of 200
+  elapsed: 00:07:14.780268
+  remaining: 00:02:09.869430
+  ETA:  2013-Jun-29 16:48:39.199760
+  speed: 0.000258213 GLUPS
+  effective memory bandwidth 3.17292 GB/s
+  time: 2013-Jun-29 16:46:29.333947
+TracingWriter::stepFinished()
+  step: 156 of 200
+  elapsed: 00:07:20.363313
+  remaining: 00:02:04.205037
+  ETA:  2013-Jun-29 16:48:39.118412
+  speed: 0.00025825 GLUPS
+  effective memory bandwidth 3.17338 GB/s
+  time: 2013-Jun-29 16:46:34.916606
+TracingWriter::stepFinished()
+  step: 158 of 200
+  elapsed: 00:07:25.968250
+  remaining: 00:01:58.548522
+  ETA:  2013-Jun-29 16:48:39.066834
+  speed: 0.000258274 GLUPS
+  effective memory bandwidth 3.17367 GB/s
+  time: 2013-Jun-29 16:46:40.521509
+TracingWriter::stepFinished()
+  step: 160 of 200
+  elapsed: 00:07:31.574041
+  remaining: 00:01:52.893510
+  ETA:  2013-Jun-29 16:48:39.017613
+  speed: 0.000258297 GLUPS
+  effective memory bandwidth 3.17395 GB/s
+  time: 2013-Jun-29 16:46:46.127333
+TracingWriter::stepFinished()
+  step: 162 of 200
+  elapsed: 00:07:37.225875
+  remaining: 00:01:47.250513
+  ETA:  2013-Jun-29 16:48:39.026450
+  speed: 0.000258292 GLUPS
+  effective memory bandwidth 3.1739 GB/s
+  time: 2013-Jun-29 16:46:51.779145
+TracingWriter::stepFinished()
+  step: 164 of 200
+  elapsed: 00:07:42.892816
+  remaining: 00:01:41.610618
+  ETA:  2013-Jun-29 16:48:39.053496
+  speed: 0.00025828 GLUPS
+  effective memory bandwidth 3.17375 GB/s
+  time: 2013-Jun-29 16:46:57.446532
+TracingWriter::stepFinished()
+  step: 166 of 200
+  elapsed: 00:07:48.580622
+  remaining: 00:01:35.974344
+  ETA:  2013-Jun-29 16:48:39.105028
+  speed: 0.000258257 GLUPS
+  effective memory bandwidth 3.17346 GB/s
+  time: 2013-Jun-29 16:47:03.134254
+TracingWriter::stepFinished()
+  step: 168 of 200
+  elapsed: 00:07:54.189319
+  remaining: 00:01:30.321775
+  ETA:  2013-Jun-29 16:48:39.061156
+  speed: 0.000258277 GLUPS
+  effective memory bandwidth 3.1737 GB/s
+  time: 2013-Jun-29 16:47:08.742583
+TracingWriter::stepFinished()
+  step: 170 of 200
+  elapsed: 00:07:59.828112
+  remaining: 00:01:24.675549
+  ETA:  2013-Jun-29 16:48:39.053723
+  speed: 0.00025828 GLUPS
+  effective memory bandwidth 3.17374 GB/s
+  time: 2013-Jun-29 16:47:14.381490
+TracingWriter::stepFinished()
+  step: 172 of 200
+  elapsed: 00:08:05.465885
+  remaining: 00:01:19.029330
+  ETA:  2013-Jun-29 16:48:39.045277
+  speed: 0.000258284 GLUPS
+  effective memory bandwidth 3.17379 GB/s
+  time: 2013-Jun-29 16:47:20.019147
+TracingWriter::stepFinished()
+  step: 174 of 200
+  elapsed: 00:08:11.073618
+  remaining: 00:01:13.378816
+  ETA:  2013-Jun-29 16:48:39.002496
+  speed: 0.000258303 GLUPS
+  effective memory bandwidth 3.17403 GB/s
+  time: 2013-Jun-29 16:47:25.626865
+TracingWriter::stepFinished()
+  step: 176 of 200
+  elapsed: 00:08:16.689422
+  remaining: 00:01:07.730375
+  ETA:  2013-Jun-29 16:48:38.969859
+  speed: 0.000258318 GLUPS
+  effective memory bandwidth 3.17422 GB/s
+  time: 2013-Jun-29 16:47:31.242684
+TracingWriter::stepFinished()
+  step: 178 of 200
+  elapsed: 00:08:22.314616
+  remaining: 00:01:02.083828
+  ETA:  2013-Jun-29 16:48:38.948506
+  speed: 0.000258328 GLUPS
+  effective memory bandwidth 3.17434 GB/s
+  time: 2013-Jun-29 16:47:36.867987
+TracingWriter::stepFinished()
+  step: 180 of 200
+  elapsed: 00:08:27.946676
+  remaining: 00:00:56.438519
+  ETA:  2013-Jun-29 16:48:38.935257
+  speed: 0.000258334 GLUPS
+  effective memory bandwidth 3.17441 GB/s
+  time: 2013-Jun-29 16:47:42.499934
+TracingWriter::stepFinished()
+  step: 182 of 200
+  elapsed: 00:08:33.609125
+  remaining: 00:00:50.796506
+  ETA:  2013-Jun-29 16:48:38.955693
+  speed: 0.000258325 GLUPS
+  effective memory bandwidth 3.1743 GB/s
+  time: 2013-Jun-29 16:47:48.162508
+TracingWriter::stepFinished()
+  step: 184 of 200
+  elapsed: 00:08:39.258839
+  remaining: 00:00:45.152942
+  ETA:  2013-Jun-29 16:48:38.961843
+  speed: 0.000258322 GLUPS
+  effective memory bandwidth 3.17426 GB/s
+  time: 2013-Jun-29 16:47:53.812115
+TracingWriter::stepFinished()
+  step: 186 of 200
+  elapsed: 00:08:44.898696
+  remaining: 00:00:39.508504
+  ETA:  2013-Jun-29 16:48:38.957262
+  speed: 0.000258324 GLUPS
+  effective memory bandwidth 3.17429 GB/s
+  time: 2013-Jun-29 16:47:59.452012
+TracingWriter::stepFinished()
+  step: 188 of 200
+  elapsed: 00:08:50.579566
+  remaining: 00:00:33.866780
+  ETA:  2013-Jun-29 16:48:38.996408
+  speed: 0.000258306 GLUPS
+  effective memory bandwidth 3.17407 GB/s
+  time: 2013-Jun-29 16:48:05.132815
+TracingWriter::stepFinished()
+  step: 190 of 200
+  elapsed: 00:08:56.224473
+  remaining: 00:00:28.222340
+  ETA:  2013-Jun-29 16:48:38.996875
+  speed: 0.000258306 GLUPS
+  effective memory bandwidth 3.17406 GB/s
+  time: 2013-Jun-29 16:48:10.777763
+TracingWriter::stepFinished()
+  step: 192 of 200
+  elapsed: 00:09:01.862414
+  remaining: 00:00:22.577600
+  ETA:  2013-Jun-29 16:48:38.990076
+  speed: 0.000258309 GLUPS
+  effective memory bandwidth 3.1741 GB/s
+  time: 2013-Jun-29 16:48:16.415771
+TracingWriter::stepFinished()
+  step: 194 of 200
+  elapsed: 00:09:07.517901
+  remaining: 00:00:16.933543
+  ETA:  2013-Jun-29 16:48:39.001506
+  speed: 0.000258304 GLUPS
+  effective memory bandwidth 3.17404 GB/s
+  time: 2013-Jun-29 16:48:22.071201
+2013-06-29 16:48:27.508 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: received signal 24
+2013-06-29 16:48:27.509 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: signal sent from USER
+2013-06-29 16:48:27.509 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: sent from pid 4293
+2013-06-29 16:48:27.509 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: could not read /proc/4293/exe
+2013-06-29 16:48:27.509 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: Permission denied
+2013-06-29 16:48:27.509 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: sent from uid 0 (root)
+2013-06-29 16:48:29.602 (WARN ) [0x40000fd8c80] :499594:ibm.runjob.client.Job: terminated by signal 9
+2013-06-29 16:48:29.602 (WARN ) [0x40000fd8c80] :499594:ibm.runjob.client.Job: abnormal termination by signal 9 from rank 775
+2013-06-29 16:48:29.602 (WARN ) [0x40000fd8c80] :499594:ibm.runjob.client.Job: 1 RAS event
+2013-06-29 16:48:29.602 (WARN ) [0x40000fd8c80] :499594:ibm.runjob.client.Job: most recent RAS event text: DDR Correctable Error Summary : count=7 MCFIR error status:  [MEMORY_CE] This bit is set when a memory CE is detected on a non-maintenance memory read op;

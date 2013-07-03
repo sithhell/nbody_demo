@@ -1,0 +1,4 @@
+go go, powerrangers!
+2013-06-29 13:42:43.568 (FATAL) [0x400011d8c80] :20035:ibm.runjob.client.Job: could not start job: job failed to start
+2013-06-29 13:42:43.568 (FATAL) [0x400011d8c80] :20035:ibm.runjob.client.Job: Load failed on R63-IC-J00: Opening application executable failed, errno 2 No such file or directory
+done

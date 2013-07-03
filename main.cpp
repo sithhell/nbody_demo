@@ -1,7 +1,14 @@
-// g++ -Ofast -march=native -I /home/gentryx/libgeodecomp/src/ -L /home/gentryx/libgeodecomp/build/Linux-x86_64/ -lgeodecomp main.cpp -fopenmp -o nbody_demo && echo go && echo go && time ./nbody_demo
-// g++ -Ofast -march=native -I /home/gentryx/libgeodecomp/src/ -L /home/gentryx/libgeodecomp/build/Linux-x86_64/ -lgeodecomp main.cpp -fopenmp -o nbody_demo && echo go && echo go && time LD_LIBRARY_PATH=/home/gentryx/libgeodecomp/build/Linux-x86_64/ ./nbody_demo
+/**
+
+g++ -Ofast -march=native -I /home/gentryx/libgeodecomp/src/ -L /home/gentryx/libgeodecomp/build/Linux-x86_64/ -lgeodecomp main.cpp -fopenmp -o nbody_demo && echo go && echo go && time ./nbody_demo
+
+g++ -Ofast -march=native -I /home/gentryx/libgeodecomp/src/ -L /home/gentryx/libgeodecomp/build/Linux-x86_64/ -lgeodecomp main.cpp -fopenmp -o nbody_demo && echo go && echo go && time LD_LIBRARY_PATH=/home/gentryx/libgeodecomp/build/Linux-x86_64/ ./nbody_demo
+
+/bgsys/drivers/ppcfloor/comm/xl/bin/mpixlcxx   -I/bgsys/local/boost/1.47.0  -qthreaded -qhalt=e -O -DNDEBUG  main.cpp  -o main  -L/bgsys/local/boost/1.47.0/lib ~/libgeodecomp/build/Linux-ppc64/libgeodecomp.a -lboost_date_time-mt-1_47 -lboost_filesystem-mt-1_47 -lboost_system-mt-1_47 -lboost_thread-mt-1_47 -Wl,-Bstatic -lcxxmpich -lmpich -lopa -lmpl -Wl,-Bdynamic -lpami -Wl,-Bstatic -lSPI -lSPI_cnk -Wl,-Bdynamic -lrt -lpthread -lstdc++ -lpthread -lstdc++ -Wl,-rpath,/bgsys/local/boost/1.47.0/lib -I ~/libgeodecomp/src/ -qmaxmem=-1
+
+*/
 #include <libgeodecomp.h>
-#include <pmmintrin.h>
+//#include <pmmintrin.h>
 
 using namespace LibGeoDecomp;
 
@@ -101,6 +108,7 @@ public:
     }
 };
 
+/*
 template<int CONTAINER_SIZE>
 class InteractorSSE
 {
@@ -190,6 +198,59 @@ public:
         }
     }
 };
+*/
+
+template<int CONTAINER_SIZE>
+class InteractorQPXSwapped
+{
+public:
+    template<typename CONTAINER>
+    void operator()(CONTAINER *target, const CONTAINER& oldSelf, const CONTAINER& neighbor)
+    {
+        vector4double forceOffset = {FORCE_OFFSET, FORCE_OFFSET, FORCE_OFFSET, FORCE_OFFSET};
+
+#pragma omp parallel for schedule(static)
+        for (int i = 0; i < CONTAINER_SIZE; ++i) {
+            vector4double oldSelfPosX = {oldSelf.posX[i], oldSelf.posX[i], oldSelf.posX[i], oldSelf.posX[i]};
+            vector4double oldSelfPosY = {oldSelf.posY[i], oldSelf.posY[i], oldSelf.posY[i], oldSelf.posY[i]};
+            vector4double oldSelfPosZ = {oldSelf.posZ[i], oldSelf.posZ[i], oldSelf.posZ[i], oldSelf.posZ[i]};
+
+            vector4double myVelX = {oldSelf.velX[i], 0, 0, 0};
+            vector4double myVelY = {oldSelf.velY[i], 0, 0, 0};
+            vector4double myVelZ = {oldSelf.velZ[i], 0, 0, 0};
+
+            for (long j = 0; j < CONTAINER_SIZE; j += 4) {
+                vector4double neighborPosX = vec_ld(j, (double*)neighbor.posX);
+                vector4double neighborPosY = vec_ld(j, (double*)neighbor.posY);
+                vector4double neighborPosZ = vec_ld(j, (double*)neighbor.posZ);
+
+                vector4double deltaX = vec_sub(oldSelfPosX, neighborPosX);
+                vector4double deltaY = vec_sub(oldSelfPosY, neighborPosY);
+                vector4double deltaZ = vec_sub(oldSelfPosZ, neighborPosZ);
+
+                vector4double dist2 = vec_add(forceOffset,
+                                              vec_mul(deltaX, deltaX));
+                dist2 = vec_add(dist2,
+                                vec_mul(deltaY, deltaY));
+                dist2 = vec_add(dist2,
+                                vec_mul(deltaZ, deltaZ));
+                // vector4double force = vec_rsqrte(dist2);
+                vector4double force = dist2;
+                myVelX = vec_add(myVelX, vec_mul(force, deltaX));
+                myVelY = vec_add(myVelY, vec_mul(force, deltaY));
+                myVelZ = vec_add(myVelZ, vec_mul(force, deltaZ));
+            }
+
+            double buf[4];
+            vec_st(myVelX, 0, buf);
+            target->velX[i] = buf[0] + buf[1] + buf[2] + buf[3];
+            vec_st(myVelY, 0, buf);
+            target->velY[i] = buf[0] + buf[1] + buf[2] + buf[3];
+            vec_st(myVelZ, 0, buf);
+            target->velZ[i] = buf[0] + buf[1] + buf[2] + buf[3];
+        }
+    }
+};
 
 template<int CONTAINER_SIZE, typename FLOAT_TYPE, typename INTERACTOR>
 class NBodyContainer
@@ -200,7 +261,9 @@ public:
 
     typedef Stencils::Moore<3, 1> Stencil;
     typedef Topologies::Cube<3>::Topology Topology;
-    class API : public CellAPITraits::Fixed
+//    class API : public CellAPITraits::Fixed
+//    {};
+    class API : public CellAPITraits::Base
     {};
 
     static inline unsigned nanoSteps()
@@ -306,7 +369,7 @@ template<typename CELL>
 void runSimulation()
 {
     int outputFrequency = 100;
-    int maxSteps = 400;
+    int maxSteps = 10;
     Coord<3> dim(3, 3, 3);
 
     MPI::Aint displacements[] = {0};
@@ -320,12 +383,14 @@ void runSimulation()
 
     NBodyInitializer<CELL> *init = new NBodyInitializer<CELL>(dim, maxSteps);
 
-    HiParSimulator::HiParSimulator<CELL, HiParSimulator::RecursiveBisectionPartition<3> > sim(
-        init,
-        MPILayer().rank() ? 0 : new TracingBalancer(new NoOpBalancer()),
-        maxSteps,
-        1,
-        objType);
+    // HiParSimulator::HiParSimulator<CELL, HiParSimulator::RecursiveBisectionPartition<3> > sim(
+    //     init,
+    //     MPILayer().rank() ? 0 : new TracingBalancer(new NoOpBalancer()),
+    //     maxSteps,
+    //     1,
+    //     objType);
+
+    SerialSimulator<CELL> sim(init);
 
     if (MPILayer().rank() == 0) {
         sim.addWriter(
@@ -345,7 +410,8 @@ void runSimulation()
         // FLOPs per interaction
         (3 + 6 + 1 + 6);
     double gflops = 1e-9 * flops / seconds;
-    std::cout << "GFLOPS: " << gflops << "\n";
+    std::cout << "GFLOPS: " << gflops << "\n"
+              << "----------------------------------------------------------------------\n";
 }
 
 int main(int argc, char **argv)
@@ -353,7 +419,24 @@ int main(int argc, char **argv)
     MPI_Init(&argc, &argv);
     Typemaps::initializeMaps();
 
-    runSimulation<NBodyContainer<512, float, InteractorSSE<512> > >();
+    if (MPILayer().rank() == 0) {
+      //        runSimulation<NBodyContainer<128, double, InteractorScalar<128, double> > >();
+        runSimulation<NBodyContainer<128, double, InteractorScalarSwapped<128, double> > >();
+        // runSimulation<NBodyContainer<128, double, InteractorQPXSwapped<128> > >();
+
+        runSimulation<NBodyContainer<256, double, InteractorScalar<256, double> > >();
+        runSimulation<NBodyContainer<256, double, InteractorScalarSwapped<256, double> > >();
+        // runSimulation<NBodyContainer<256, double, InteractorQPXSwapped<256> > >();
+
+        runSimulation<NBodyContainer<512, double, InteractorScalar<512, double> > >();
+        runSimulation<NBodyContainer<512, double, InteractorScalarSwapped<512, double> > >();
+        // runSimulation<NBodyContainer<512, double, InteractorQPXSwapped<512> > >();
+
+        runSimulation<NBodyContainer<1024, double, InteractorScalar<1024, double> > >();
+        runSimulation<NBodyContainer<1024, double, InteractorScalarSwapped<1024, double> > >();
+        // runSimulation<NBodyContainer<1024, double, InteractorQPXSwapped<1024> > >();
+    }
+// runSimulation<NBodyContainer<512, float, InteractorSSE<512> > >();
     // runSimulation<NBodyContainer<512, float, InteractorSSESwapped<512> > >();
 
     MPI_Finalize();

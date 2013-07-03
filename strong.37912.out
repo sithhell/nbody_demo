@@ -1,0 +1,69 @@
+go go, powerrangers!
+ranks: 2048
+dim: (90, 90, 90)
+TracingWriter::initialized()
+  time: 2013-Jun-30 10:37:09.460966
+TracingWriter::stepFinished()
+  step: 2 of 200
+  elapsed: 00:01:09.622799
+  remaining: 01:54:52.657101
+  ETA:  2013-Jun-30 12:33:11.740339
+  speed: 2.09414e-05 GLUPS
+  effective memory bandwidth 0.257328 GB/s
+  time: 2013-Jun-30 10:38:19.087302
+TracingWriter::stepFinished()
+  step: 4 of 200
+  elapsed: 00:02:20.487685
+  remaining: 01:54:43.896565
+  ETA:  2013-Jun-30 12:34:13.844689
+  speed: 2.07563e-05 GLUPS
+  effective memory bandwidth 0.255053 GB/s
+  time: 2013-Jun-30 10:39:29.951254
+TracingWriter::stepFinished()
+  step: 6 of 200
+  elapsed: 00:03:42.155916
+  remaining: 01:59:43.041284
+  ETA:  2013-Jun-30 12:40:34.657639
+  speed: 1.96889e-05 GLUPS
+  effective memory bandwidth 0.241937 GB/s
+  time: 2013-Jun-30 10:40:51.619562
+TracingWriter::stepFinished()
+  step: 8 of 200
+  elapsed: 00:05:03.904481
+  remaining: 02:01:33.707544
+  ETA:  2013-Jun-30 12:43:47.072464
+  speed: 1.91902e-05 GLUPS
+  effective memory bandwidth 0.23581 GB/s
+  time: 2013-Jun-30 10:42:13.371283
+TracingWriter::stepFinished()
+  step: 10 of 200
+  elapsed: 00:06:25.578150
+  remaining: 02:02:05.984850
+  ETA:  2013-Jun-30 12:45:41.023439
+  speed: 1.89067e-05 GLUPS
+  effective memory bandwidth 0.232325 GB/s
+  time: 2013-Jun-30 10:43:35.041974
+TracingWriter::stepFinished()
+  step: 12 of 200
+  elapsed: 00:07:46.898843
+  remaining: 02:01:54.748540
+  ETA:  2013-Jun-30 12:46:51.107822
+  speed: 1.87364e-05 GLUPS
+  effective memory bandwidth 0.230233 GB/s
+  time: 2013-Jun-30 10:44:56.362505
+TracingWriter::stepFinished()
+  step: 14 of 200
+  elapsed: 00:09:08.018555
+  remaining: 02:01:20.817945
+  ETA:  2013-Jun-30 12:47:38.296939
+  speed: 1.86235e-05 GLUPS
+  effective memory bandwidth 0.228845 GB/s
+  time: 2013-Jun-30 10:46:17.482168
+2013-06-30 10:46:55.137 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: received signal 24
+2013-06-30 10:46:55.137 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: signal sent from USER
+2013-06-30 10:46:55.137 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: sent from pid 23457
+2013-06-30 10:46:55.138 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: could not read /proc/23457/exe
+2013-06-30 10:46:55.138 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: Permission denied
+2013-06-30 10:46:55.138 (WARN ) [0x40000fd8c80] :ibm.runjob.LogSignalInfo: sent from uid 0 (root)
+2013-06-30 10:46:56.555 (WARN ) [0x40000fd8c80] :515004:ibm.runjob.client.Job: terminated by signal 9
+2013-06-30 10:46:56.555 (WARN ) [0x40000fd8c80] :515004:ibm.runjob.client.Job: abnormal termination by signal 9 from rank 257
