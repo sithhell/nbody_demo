@@ -1,0 +1,184 @@
+prpc0800@juqueen1:~/nbody_demo $ for i in weak_jobscript_strong*.sh; do echo $i;  llsubmit $i; done
+weak_jobscript_strong10000.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37440" has been submitted.
+weak_jobscript_strong1024.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37441" has been submitted.
+weak_jobscript_strong128.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37442" has been submitted.
+weak_jobscript_strong16384.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37443" has been submitted.
+weak_jobscript_strong16.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37444" has been submitted.
+weak_jobscript_strong1.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37445" has been submitted.
+weak_jobscript_strong2048.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37446" has been submitted.
+weak_jobscript_strong256.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37447" has been submitted.
+weak_jobscript_strong2.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37448" has been submitted.
+weak_jobscript_strong32.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37449" has been submitted.
+weak_jobscript_strong4096.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37450" has been submitted.
+weak_jobscript_strong4.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37451" has been submitted.
+weak_jobscript_strong512.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37452" has been submitted.
+weak_jobscript_strong64.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37453" has been submitted.
+weak_jobscript_strong8192.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37454" has been submitted.
+weak_jobscript_strong8.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37455" has been submitted.
+prpc0800@juqueen1:~/nbody_demo $ for i in jobscript_strong*.sh; do echo $i;  llsubmit $i; done
+jobscript_strong10000.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37456" has been submitted.
+jobscript_strong1024.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37457" has been submitted.
+jobscript_strong128.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37458" has been submitted.
+jobscript_strong16384.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37459" has been submitted.
+jobscript_strong16.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37460" has been submitted.
+jobscript_strong1.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37461" has been submitted.
+jobscript_strong2048.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37462" has been submitted.
+jobscript_strong256.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37463" has been submitted.
+jobscript_strong2.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37464" has been submitted.
+jobscript_strong32.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37465" has been submitted.
+jobscript_strong4096.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37466" has been submitted.
+jobscript_strong4.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37467" has been submitted.
+jobscript_strong512.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37468" has been submitted.
+jobscript_strong64.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37469" has been submitted.
+jobscript_strong8192.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37470" has been submitted.
+jobscript_strong8.sh
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37471" has been submitted.
+
+
+
+
+small jobs:
+
+prpc0800@juqueen1:~/nbody_demo $ llsubmit weak_jobscript_strong1.sh 
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37915" has been submitted.
+prpc0800@juqueen1:~/nbody_demo $ llsubmit weak_jobscript_strong2.sh 
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37916" has been submitted.
+prpc0800@juqueen1:~/nbody_demo $ llsubmit weak_jobscript_strong4.sh 
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37917" has been submitted.
+prpc0800@juqueen1:~/nbody_demo $ llsubmit weak_jobscript_strong8.sh 
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37918" has been submitted.
+prpc0800@juqueen1:~/nbody_demo $ llsubmit weak_jobscript_strong16.sh 
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37919" has been submitted.
+
+
+prpc0800@juqueen1:~/nbody_demo $ llsubmit jobscript_strong1.sh 
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37910" has been submitted.
+prpc0800@juqueen1:~/nbody_demo $ llsubmit jobscript_strong2.sh 
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37911" has been submitted.
+prpc0800@juqueen1:~/nbody_demo $ llsubmit jobscript_strong4.sh 
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37912" has been submitted.
+prpc0800@juqueen1:~/nbody_demo $ llsubmit jobscript_strong8.sh 
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37913" has been submitted.
+prpc0800@juqueen1:~/nbody_demo $ llsubmit jobscript_strong16.sh 
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen1c1.zam.kfa-juelich.de.37914" has been submitted.
+
+
+prpc0800@juqueen2:~/nbody_demo $ for i in variance_*.sh; do echo $i; done
+variance_jobscript_strong16.sh
+variance_jobscript_strong1.sh
+variance_jobscript_strong2.sh
+variance_jobscript_strong32.sh
+variance_jobscript_strong4.sh
+variance_jobscript_strong64.sh
+variance_jobscript_strong8.sh
+variance_jobscript_weak16.sh
+variance_jobscript_weak1.sh
+variance_jobscript_weak2.sh
+variance_jobscript_weak32.sh
+variance_jobscript_weak4.sh
+variance_jobscript_weak64.sh
+variance_jobscript_weak8.sh
+
+prpc0800@juqueen2:~/nbody_demo $           
+prpc0800@juqueen2:~/nbody_demo $ for i in variance_jobscript_*.sh; do llsubmit $i; done
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen2c1.zam.kfa-juelich.de.23844" has been submitted.
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen2c1.zam.kfa-juelich.de.23845" has been submitted.
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen2c1.zam.kfa-juelich.de.23846" has been submitted.
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen2c1.zam.kfa-juelich.de.23847" has been submitted.
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen2c1.zam.kfa-juelich.de.23848" has been submitted.
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen2c1.zam.kfa-juelich.de.23849" has been submitted.
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen2c1.zam.kfa-juelich.de.23850" has been submitted.
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen2c1.zam.kfa-juelich.de.23851" has been submitted.
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen2c1.zam.kfa-juelich.de.23852" has been submitted.
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen2c1.zam.kfa-juelich.de.23853" has been submitted.
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen2c1.zam.kfa-juelich.de.23854" has been submitted.
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen2c1.zam.kfa-juelich.de.23855" has been submitted.
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen2c1.zam.kfa-juelich.de.23856" has been submitted.
+llsubmit: Processed command file through Submit Filter: "/bgdata/admin/loadl/extensions/filter".
+llsubmit: The job "juqueen2c1.zam.kfa-juelich.de.23857" has been submitted.

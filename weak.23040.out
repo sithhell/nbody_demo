@@ -1,0 +1,6 @@
+go go, powerrangers!
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+2013-06-29 13:46:43.646 (WARN ) [0x40000fd8c80] :498867:ibm.runjob.client.Job: terminated by signal 6
+2013-06-29 13:46:43.646 (WARN ) [0x40000fd8c80] :498867:ibm.runjob.client.Job: abnormal termination by signal 6 from rank 730
+done
