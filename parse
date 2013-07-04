@@ -1,0 +1,36 @@
+#!/usr/bin/ruby
+require 'pp'
+require 'time'
+
+if ARGV.size != 1
+    STDERR.puts "Usage: $0 DATAFILE"
+end
+
+lines = File.open(ARGV[0]).readlines
+lines.shift
+zero = Time.parse "00:00:00.0"
+
+# base: 1 thread per node (1x smt)
+# base_lups = 12.623736031149
+# base: 16 threads per node (4x smt)
+base_lups = 9.60217817622054
+
+lines.each do |line|
+  ranks, cores, dim_x, dim_y, dim_z, steps, time = line.split(";")
+  ranks = ranks.to_i
+  cores = cores.to_i
+  dim_x = dim_x.to_i
+  dim_y = dim_y.to_i
+  dim_z = dim_z.to_i
+  steps = steps.to_i
+  time = Time.parse(time) - zero
+
+  lups = dim_x * dim_y * dim_z * steps / time
+  lupsPerCore = lups / cores
+  lupsPerRank = lups / ranks
+  speedup = ranks * lupsPerRank / base_lups
+  puts "#{ranks} #{ranks} #{speedup}"
+
+  # speedup = ranks * lupsPerCore / base_lups
+  # puts "#{cores} #{cores} #{speedup}"
+end
