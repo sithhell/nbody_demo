@@ -28,9 +28,12 @@ lines.each do |line|
   lups = dim_x * dim_y * dim_z * steps / time
   lupsPerCore = lups / cores
   lupsPerRank = lups / ranks
+
   speedup = ranks * lupsPerRank / base_lups
-  puts "#{ranks} #{ranks} #{speedup}"
+  efficiency = speedup / ranks
+  puts "#{ranks} #{ranks} #{speedup} #{efficiency}"
 
   # speedup = ranks * lupsPerCore / base_lups
-  # puts "#{cores} #{cores} #{speedup}"
+  # efficiency = speedup / cores
+  # puts "#{cores} #{cores} #{speedup} #{cores}"
 end
