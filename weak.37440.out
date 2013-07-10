@@ -1,0 +1,8 @@
+go go, powerrangers!
+ranks: 655360
+dim: (1302, 1302, 1302)
+2013-07-06 14:21:59.059 (WARN ) [0x40000fd8c80] :607191:ibm.runjob.client.Job: terminated by signal 4
+2013-07-06 14:21:59.060 (WARN ) [0x40000fd8c80] :607191:ibm.runjob.client.Job: abnormal termination by signal 4 from rank 91456
+2013-07-06 14:21:59.060 (WARN ) [0x40000fd8c80] :607191:ibm.runjob.client.Job: 3 RAS events
+2013-07-06 14:21:59.060 (WARN ) [0x40000fd8c80] :607191:ibm.runjob.client.Job: most recent RAS event text: DDR Correctable Error Summary : count=4 MCFIR error status:  [MEMORY_CE] This bit is set when a memory CE is detected on a non-maintenance memory read op;
+done
