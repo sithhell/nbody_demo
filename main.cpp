@@ -8,7 +8,7 @@ g++ -Ofast -march=native -I /home/gentryx/libgeodecomp/src/ -L /home/gentryx/lib
 
 */
 #include <libgeodecomp.h>
-//#include <pmmintrin.h>
+#include <pmmintrin.h>
 
 using namespace LibGeoDecomp;
 
@@ -108,7 +108,6 @@ public:
     }
 };
 
-/*
 template<int CONTAINER_SIZE>
 class InteractorSSE
 {
@@ -198,8 +197,8 @@ public:
         }
     }
 };
-*/
 
+/*
 template<int CONTAINER_SIZE>
 class InteractorQPXSwapped
 {
@@ -251,6 +250,7 @@ public:
         }
     }
 };
+*/
 
 template<int CONTAINER_SIZE, typename FLOAT_TYPE, typename INTERACTOR>
 class NBodyContainer
@@ -420,24 +420,30 @@ int main(int argc, char **argv)
     Typemaps::initializeMaps();
 
     if (MPILayer().rank() == 0) {
-      //        runSimulation<NBodyContainer<128, double, InteractorScalar<128, double> > >();
+        runSimulation<NBodyContainer<128, double, InteractorScalar<128, double> > >();
         runSimulation<NBodyContainer<128, double, InteractorScalarSwapped<128, double> > >();
+        runSimulation<NBodyContainer<128, float,  InteractorSSE<128> > >();
+        runSimulation<NBodyContainer<128, float,  InteractorSSESwapped<128> > >();
         // runSimulation<NBodyContainer<128, double, InteractorQPXSwapped<128> > >();
 
         runSimulation<NBodyContainer<256, double, InteractorScalar<256, double> > >();
         runSimulation<NBodyContainer<256, double, InteractorScalarSwapped<256, double> > >();
+        runSimulation<NBodyContainer<256, float,  InteractorSSE<256> > >();
+        runSimulation<NBodyContainer<256, float,  InteractorSSESwapped<256> > >();
         // runSimulation<NBodyContainer<256, double, InteractorQPXSwapped<256> > >();
 
         runSimulation<NBodyContainer<512, double, InteractorScalar<512, double> > >();
         runSimulation<NBodyContainer<512, double, InteractorScalarSwapped<512, double> > >();
+        runSimulation<NBodyContainer<512, float,  InteractorSSE<512> > >();
+        runSimulation<NBodyContainer<512, float,  InteractorSSESwapped<512> > >();
         // runSimulation<NBodyContainer<512, double, InteractorQPXSwapped<512> > >();
 
         runSimulation<NBodyContainer<1024, double, InteractorScalar<1024, double> > >();
         runSimulation<NBodyContainer<1024, double, InteractorScalarSwapped<1024, double> > >();
+        runSimulation<NBodyContainer<1024, float,  InteractorSSE<1024> > >();
+        runSimulation<NBodyContainer<1024, float,  InteractorSSESwapped<1024> > >();
         // runSimulation<NBodyContainer<1024, double, InteractorQPXSwapped<1024> > >();
     }
-// runSimulation<NBodyContainer<512, float, InteractorSSE<512> > >();
-    // runSimulation<NBodyContainer<512, float, InteractorSSESwapped<512> > >();
 
     MPI_Finalize();
     return 0;
