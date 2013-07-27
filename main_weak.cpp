@@ -371,7 +371,7 @@ void runSimulation()
     int outputFrequency = 1;
     int maxSteps = 200;
     double factor = pow(MPILayer().size(), 1.0/3.0);
-    Coord<3> baseDim(15, 15, 15);
+    Coord<3> baseDim(10, 10, 10);
     Coord<3> dim(factor * baseDim.x(), factor * baseDim.y(), factor * baseDim.z()); 
 
     MPI::Aint displacements[] = {0};

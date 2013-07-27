@@ -1,0 +1,47 @@
+go go, powerrangers!
+ranks: 1835008
+dim: (1224, 1224, 1224)
+TracingWriter::initialized()
+  time: 2013-Jul-23 15:19:33.257651
+TracingWriter::stepFinished()
+  step: 1 of 200
+  elapsed: 00:01:44.346227
+  remaining: 05:46:04.899173
+  ETA:  2013-Jul-23 21:07:22.502627
+  speed: 0.0175739 GLUPS
+  effective memory bandwidth 215.948 GB/s
+  time: 2013-Jul-23 15:21:17.607495
+TracingWriter::stepFinished()
+  step: 2 of 200
+  elapsed: 00:03:28.278733
+  remaining: 05:43:39.594567
+  ETA:  2013-Jul-23 21:06:41.130527
+  speed: 0.0176088 GLUPS
+  effective memory bandwidth 216.377 GB/s
+  time: 2013-Jul-23 15:23:01.539181
+TracingWriter::stepFinished()
+  step: 3 of 200
+  elapsed: 00:05:21.747479
+  remaining: 05:52:08.084454
+  ETA:  2013-Jul-23 21:17:03.089160
+  speed: 0.0170982 GLUPS
+  effective memory bandwidth 210.103 GB/s
+  time: 2013-Jul-23 15:24:55.007764
+TracingWriter::stepFinished()
+  step: 4 of 200
+  elapsed: 00:07:03.609954
+  remaining: 05:45:56.887746
+  ETA:  2013-Jul-23 21:12:33.754927
+  speed: 0.0173156 GLUPS
+  effective memory bandwidth 212.774 GB/s
+  time: 2013-Jul-23 15:26:36.870448
+2013-07-23 15:27:39.798 (WARN ) [0x400011c8c80] :ibm.runjob.LogSignalInfo: received signal 24
+2013-07-23 15:27:39.798 (WARN ) [0x400011c8c80] :ibm.runjob.LogSignalInfo: signal sent from USER
+2013-07-23 15:27:39.798 (WARN ) [0x400011c8c80] :ibm.runjob.LogSignalInfo: sent from pid 12800
+2013-07-23 15:27:39.798 (WARN ) [0x400011c8c80] :ibm.runjob.LogSignalInfo: could not read /proc/12800/exe
+2013-07-23 15:27:39.799 (WARN ) [0x400011c8c80] :ibm.runjob.LogSignalInfo: Permission denied
+2013-07-23 15:27:39.799 (WARN ) [0x400011c8c80] :ibm.runjob.LogSignalInfo: sent from uid 0 (root)
+2013-07-23 15:27:42.053 (WARN ) [0x400011c8c80] :669784:ibm.runjob.client.Job: terminated by signal 9
+2013-07-23 15:27:42.053 (WARN ) [0x400011c8c80] :669784:ibm.runjob.client.Job: abnormal termination by signal 9 from rank 1267463
+2013-07-23 15:27:42.053 (WARN ) [0x400011c8c80] :669784:ibm.runjob.client.Job: 269 RAS events
+2013-07-23 15:27:42.053 (WARN ) [0x400011c8c80] :669784:ibm.runjob.client.Job: most recent RAS event text: DDR Correctable Error Summary : count=10000 MCFIR error status:  [MEMORY_CE] This bit is set when a memory CE is detected on a non-maintenance memory read op;
