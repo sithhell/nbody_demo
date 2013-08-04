@@ -1,5 +1,8 @@
 #ifndef NBODY_CONTAINER_HPP
 #define NBODY_CONTAINER_HPP
+
+#include <boost/serialization/is_bitwise_serializable.hpp>
+
 template<int CONTAINER_SIZE, typename FLOAT_TYPE, typename INTERACTOR>
 class NBodyContainer
 {
@@ -101,6 +104,26 @@ public:
     FLOAT velX[CONTAINER_SIZE];
     FLOAT velY[CONTAINER_SIZE];
     FLOAT velZ[CONTAINER_SIZE];
+
+    template <typename ARCHIVE>
+    void serialize(ARCHIVE& ar, unsigned)
+    {
+        ar & posX;
+        ar & posY;
+        ar & posZ;
+        ar & velX;
+        ar & velY;
+        ar & velZ;
+    }
 };
+
+namespace boost { namespace serialization {
+
+    template<int CONTAINER_SIZE, typename FLOAT_TYPE, typename INTERACTOR>
+    struct is_bitwise_serializable<NBodyContainer<CONTAINER_SIZE, FLOAT_TYPE, INTERACTOR> >
+        : boost::mpl::true_
+    {};
+
+}}
 
 #endif
