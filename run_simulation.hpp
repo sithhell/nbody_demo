@@ -3,20 +3,10 @@
 #define RUN_SIMULATION_HPP
 
 template<typename CELL>
-void runSimulation()
+void runSimulation(Coord<3> dim)
 {
     int outputFrequency = 100;
     int maxSteps = 10;
-    Coord<3> dim(3, 3, 3);
-
-    MPI::Aint displacements[] = {0};
-    MPI::Datatype memberTypes[] = {MPI::CHAR};
-    int lengths[] = { sizeof(CELL) };
-    MPI::Datatype objType;
-    objType =
-        MPI::Datatype::Create_struct(1, lengths, displacements, memberTypes);
-    objType.Commit();
-
 
     NBodyInitializer<CELL> *init = new NBodyInitializer<CELL>(dim, maxSteps);
 
