@@ -89,62 +89,59 @@ int main(int argc, char **argv)
 {
     MPI_Init(&argc, &argv);
     Typemaps::initializeMaps();
-#ifndef NO_OMP
-    omp_set_num_threads(1);
-#endif
 
     Coord<3> dim(3, 3, 3);
 
     if (MPILayer().rank() == 0) {
-        runSimulation<NBodyContainer<128, float, InteractorScalar<128, float> > >(dim);
-        runSimulation<NBodyContainer<128, float, InteractorScalarSwapped<128, float> > >(dim);
 #ifdef HPX_NATIVE_MIC
-        runSimulation<NBodyContainer<128, float,  InteractorMIC<128> > >(dim);
-        runSimulation<NBodyContainer<128, float,  InteractorMICSwapped<128> > >(dim);
+        runSimulation<NBodyContainer<128, float,  InteractorMIC<128, float> > >(dim);
+        runSimulation<NBodyContainer<128, float,  InteractorMICSwapped<128, float> > >(dim);
 #else
-        runSimulation<NBodyContainer<128, float,  InteractorSSE<128> > >(dim);
-        runSimulation<NBodyContainer<128, float,  InteractorSSESwapped<128> > >(dim);
-        runSimulation<NBodyContainer<128, float,  InteractorAVX<128> > >(dim);
-        runSimulation<NBodyContainer<128, float,  InteractorAVXSwapped<128> > >(dim);
+        /*
+        runSimulation<NBodyContainer<128, float,  InteractorSSE<128, float> > >(dim);
+        runSimulation<NBodyContainer<128, float,  InteractorSSESwapped<128, float> > >(dim);
+        */
+        runSimulation<NBodyContainer<128, float,  InteractorAVX<128, float> > >(dim);
+        runSimulation<NBodyContainer<128, float,  InteractorAVXSwapped<128, float> > >(dim);
 #endif
         // runSimulation<NBodyContainer<128, float, InteractorQPXSwapped<128> > >(dim);
 
-        runSimulation<NBodyContainer<256, float, InteractorScalar<256, float> > >(dim);
-        runSimulation<NBodyContainer<256, float, InteractorScalarSwapped<256, float> > >(dim);
 #ifdef HPX_NATIVE_MIC
-        runSimulation<NBodyContainer<256, float,  InteractorMIC<256> > >(dim);
-        runSimulation<NBodyContainer<256, float,  InteractorMICSwapped<256> > >(dim);
+        runSimulation<NBodyContainer<256, float,  InteractorMIC<256, float> > >(dim);
+        runSimulation<NBodyContainer<256, float,  InteractorMICSwapped<256, float> > >(dim);
 #else
-        runSimulation<NBodyContainer<256, float,  InteractorSSE<256> > >(dim);
-        runSimulation<NBodyContainer<256, float,  InteractorSSESwapped<256> > >(dim);
-        runSimulation<NBodyContainer<256, float,  InteractorAVX<256> > >(dim);
-        runSimulation<NBodyContainer<256, float,  InteractorAVXSwapped<256> > >(dim);
+        /*
+        runSimulation<NBodyContainer<256, float,  InteractorSSE<256, float> > >(dim);
+        runSimulation<NBodyContainer<256, float,  InteractorSSESwapped<256, float> > >(dim);
+        */
+        runSimulation<NBodyContainer<256, float,  InteractorAVX<256, float> > >(dim);
+        runSimulation<NBodyContainer<256, float,  InteractorAVXSwapped<256, float> > >(dim);
 #endif
         // runSimulation<NBodyContainer<256, float, InteractorQPXSwapped<256> > >(dim);
 
-        runSimulation<NBodyContainer<512, float, InteractorScalar<512, float> > >(dim);
-        runSimulation<NBodyContainer<512, float, InteractorScalarSwapped<512, float> > >(dim);
 #ifdef HPX_NATIVE_MIC
-        runSimulation<NBodyContainer<512, float,  InteractorMIC<512> > >(dim);
-        runSimulation<NBodyContainer<512, float,  InteractorMICSwapped<512> > >(dim);
+        runSimulation<NBodyContainer<512, float,  InteractorMIC<512, float> > >(dim);
+        runSimulation<NBodyContainer<512, float,  InteractorMICSwapped<512, float> > >(dim);
 #else
-        runSimulation<NBodyContainer<512, float,  InteractorSSE<512> > >(dim);
-        runSimulation<NBodyContainer<512, float,  InteractorSSESwapped<512> > >(dim);
-        runSimulation<NBodyContainer<512, float,  InteractorAVX<512> > >(dim);
-        runSimulation<NBodyContainer<512, float,  InteractorAVXSwapped<512> > >(dim);
+        /*
+        runSimulation<NBodyContainer<512, float,  InteractorSSE<512, float> > >(dim);
+        runSimulation<NBodyContainer<512, float,  InteractorSSESwapped<512, float> > >(dim);
+        */
+        runSimulation<NBodyContainer<512, float,  InteractorAVX<512, float> > >(dim);
+        runSimulation<NBodyContainer<512, float,  InteractorAVXSwapped<512, float> > >(dim);
 #endif
         // runSimulation<NBodyContainer<512, float, InteractorQPXSwapped<512> > >(dim);
 
-        runSimulation<NBodyContainer<1024, float, InteractorScalar<1024, float> > >(dim);
-        runSimulation<NBodyContainer<1024, float, InteractorScalarSwapped<1024, float> > >(dim);
 #ifdef HPX_NATIVE_MIC
-        runSimulation<NBodyContainer<1024, float,  InteractorMIC<1024> > >(dim);
-        runSimulation<NBodyContainer<1024, float,  InteractorMICSwapped<1024> > >(dim);
+        runSimulation<NBodyContainer<1024, float,  InteractorMIC<1024, float> > >(dim);
+        runSimulation<NBodyContainer<1024, float,  InteractorMICSwapped<1024, float> > >(dim);
 #else
-        runSimulation<NBodyContainer<1024, float,  InteractorSSE<1024> > >(dim);
-        runSimulation<NBodyContainer<1024, float,  InteractorSSESwapped<1024> > >(dim);
-        runSimulation<NBodyContainer<1024, float,  InteractorAVX<1024> > >(dim);
-        runSimulation<NBodyContainer<1024, float,  InteractorAVXSwapped<1024> > >(dim);
+        /*
+        runSimulation<NBodyContainer<1024, float,  InteractorSSE<1024, float> > >(dim);
+        runSimulation<NBodyContainer<1024, float,  InteractorSSESwapped<1024, float> > >(dim);
+        */
+        runSimulation<NBodyContainer<1024, float,  InteractorAVX<1024, float> > >(dim);
+        runSimulation<NBodyContainer<1024, float,  InteractorAVXSwapped<1024, float> > >(dim);
 #endif
         // runSimulation<NBodyContainer<1024, float, InteractorQPXSwapped<1024> > >(dim);
     }

@@ -10,6 +10,7 @@ public:
     void operator()(CONTAINER *target, const CONTAINER& oldSelf, const CONTAINER& neighbor)
     {
         for (int j = 0; j < CONTAINER_SIZE; ++j) {
+#pragma simd
             for (int i = 0; i < CONTAINER_SIZE; ++i) {
                 FLOAT deltaX = oldSelf.posX[i] - neighbor.posX[j];
                 FLOAT deltaY = oldSelf.posY[i] - neighbor.posY[j];
@@ -24,6 +25,16 @@ public:
                 target->velY[i] += force * deltaY;
                 target->velZ[i] += force * deltaZ;
             }
+        }
+    }
+
+    template<typename CONTAINER>
+    void move(CONTAINER *target, const CONTAINER& oldSelf)
+    {
+        for (int i = 0; i < CONTAINER_SIZE; ++i) {
+            target->posX[i] = oldSelf.posX[i] + target->velX[i];
+            target->posY[i] = oldSelf.posY[i] + target->velY[i];
+            target->posZ[i] = oldSelf.posZ[i] + target->velZ[i];
         }
     }
 

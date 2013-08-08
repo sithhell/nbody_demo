@@ -85,9 +85,9 @@ using namespace LibGeoDecomp;
 
 #if defined(NO_OMP) && defined(NO_MPI)
 #ifdef HPX_NATIVE_MIC
-typedef NBodyContainer<128, float, InteractorMIC<128> > CellType;
+typedef NBodyContainer<128, float, InteractorMIC<128, float> > CellType;
 #else
-typedef NBodyContainer<128, float, InteractorAVX<128> > CellType;
+typedef NBodyContainer<128, float, InteractorAVX<128, float> > CellType;
 #endif
 typedef NBodyInitializer<CellType> NBodyInitializerType;
 typedef HpxSimulator::HpxSimulator<CellType, HiParSimulator::RecursiveBisectionPartition<3> > SimulatorType;
@@ -118,14 +118,14 @@ int main(int argc, char **argv)
     std::size_t size = hpx::get_num_worker_threads();
 #endif
     
-    double factor = pow(size, 1.0/3.0);
+    float factor = pow(size, 1.0/3.0);
     Coord<3> baseDim(10, 10, 10);
     Coord<3> dim(factor * baseDim.x(), factor * baseDim.y(), factor * baseDim.z()); 
 
 #ifdef HPX_NATIVE_MIC
-        runSimulation<NBodyContainer<128, float,  InteractorMIC<128> > >(dim);
+        runSimulation<NBodyContainer<128, float,  InteractorMIC<128, float> > >(dim);
 #else
-        runSimulation<NBodyContainer<128, float,  InteractorAVX<128> > >(dim);
+        runSimulation<NBodyContainer<128, float,  InteractorAVX<128, float> > >(dim);
 #endif
         // runSimulation<NBodyContainer<128, float, InteractorQPXSwapped<128> > >(dim);
 
@@ -138,11 +138,11 @@ int main(int argc, char **argv)
         // runSimulation<NBodyContainer<256, float, InteractorQPXSwapped<256> > >(dim);
 
 #ifdef HPX_NATIVE_MIC
-        runSimulation<NBodyContainer<512, float,  InteractorMIC<512> > >(dim);
+        runSimulation<NBodyContainer<128, float,  InteractorMIC<128> > >(dim);
 #else
-        runSimulation<NBodyContainer<512, float,  InteractorAVX<512> > >(dim);
+        runSimulation<NBodyContainer<128, float,  InteractorAVX<128> > >(dim);
 #endif
-        // runSimulation<NBodyContainer<512, float, InteractorQPXSwapped<512> > >(dim);
+        // runSimulation<NBodyContainer<128, float, InteractorQPXSwapped<128> > >(dim);
 
 #ifdef HPX_NATIVE_MIC
         runSimulation<NBodyContainer<1024, float,  InteractorMIC<1024> > >(dim);
