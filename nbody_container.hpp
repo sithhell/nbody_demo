@@ -51,6 +51,7 @@ public:
     {
         const NBodyContainer& oldSelf = hood[FixedCoord<0, 0, 0>()];
 
+#pragma simd
         for (int i = 0; i < CONTAINER_SIZE; ++i) {
             velX[i] = oldSelf.velX[i];
             velY[i] = oldSelf.velY[i];
@@ -90,12 +91,7 @@ public:
         INTERACT( 0,  1,  1);
         INTERACT( 1,  1,  1);
 
-        for (int i = 0; i < CONTAINER_SIZE; ++i) {
-            posX[i] = oldSelf.posX[i] + velX[i];
-            posY[i] = oldSelf.posY[i] + velY[i];
-            posZ[i] = oldSelf.posZ[i] + velZ[i];
-        }
-
+        INTERACTOR().move(this, oldSelf);
     }
 
     FLOAT posX[CONTAINER_SIZE];

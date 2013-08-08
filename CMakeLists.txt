@@ -56,7 +56,7 @@ link_directories(${HPX_LIBRARY_DIR})
 link_directories(${LIBGEODECOMP_LIB_DIR}/lib/hpx)
 
 add_hpx_executable(
-    nbody_openmp
+    nbody_smp
     ESSENTIAL
     SOURCES main.cpp
     HEADERS
@@ -71,7 +71,7 @@ add_hpx_executable(
     LINK_FLAGS -openmp
     DEPENDENCIES
         ${LOCAL_LIBGEODECOMP_LINK_LIB}
-    FOLDER "nbody MPI"
+    FOLDER "nbody SMP"
 )
 
 add_hpx_executable(
@@ -105,26 +105,8 @@ add_hpx_executable(
         nbody_container.hpp
         nbody_initializer.hpp
         run_simulation.hpp
-    COMPILE_FLAGS "-DNO_OMP -DNO_MPI -DHPX_LIMIT=10"
+    COMPILE_FLAGS "-DNO_OMP -DNO_MPI -DHPX_LIMIT=15"
     DEPENDENCIES
         ${LOCAL_LIBGEODECOMP_LINK_LIB}
-    FOLDER "nbody MPI Weak"
-)
-
-add_hpx_executable(
-    nbody_hpx_smp
-    ESSENTIAL
-    SOURCES main.cpp
-    HEADERS
-        interactor_scalar.hpp
-        interactor_scalar_swapped.hpp
-        interactor_sse.hpp
-        interactor_sse_swapped.hpp
-        nbody_container.hpp
-        nbody_initializer.hpp
-        run_simulation.hpp
-    COMPILE_FLAGS -DNO_OMP
-    DEPENDENCIES
-        ${LOCAL_LIBGEODECOMP_LINK_LIB}
-    FOLDER "nbody MPI"
+    FOLDER "nbody HPX Weak"
 )
