@@ -24,25 +24,50 @@ public:
             __m512 myVelY = _mm512_load_ps(oldSelf.velY + i);
             __m512 myVelZ = _mm512_load_ps(oldSelf.velZ + i);
 
-            for (int j = 0; j < CONTAINER_SIZE; ++j) {
-                __m512 neighborPosX = _mm512_set1_ps(neighbor.posX[j]);
-                __m512 neighborPosY = _mm512_set1_ps(neighbor.posY[j]);
-                __m512 neighborPosZ = _mm512_set1_ps(neighbor.posZ[j]);
-                __m512 deltaX = _mm512_sub_ps(oldSelfPosX, neighborPosX);
-                __m512 deltaY = _mm512_sub_ps(oldSelfPosY, neighborPosY);
-                __m512 deltaZ = _mm512_sub_ps(oldSelfPosZ, neighborPosZ);
-                __m512 dist2 = _mm512_fmadd_ps(forceOffset, deltaX, deltaX);
-                dist2 = _mm512_fmadd_ps(dist2, deltaY, deltaY);
-                dist2 = _mm512_fmadd_ps(dist2, deltaZ, deltaZ);
-                __m512 force = _mm512_rsqrt23_ps(dist2);
-                myVelX = _mm512_fmadd_ps(myVelX, force, deltaX);
-                myVelY = _mm512_fmadd_ps(myVelY, force, deltaY);
-                myVelZ = _mm512_fmadd_ps(myVelZ, force, deltaZ);
+            for (int j = 0; j < CONTAINER_SIZE; j += 16) {
+                const float * neighborPosXVec = neighbor.posX + j;
+                const float * neighborPosYVec = neighbor.posY + j;
+                const float * neighborPosZVec = neighbor.posZ + j;
+
+                __m512 neighborPosX;
+                __m512 neighborPosY;
+                __m512 neighborPosZ;
+                
+                __m512 deltaX;
+                __m512 deltaY;
+                __m512 deltaZ;
+                __m512 dist2;
+                __m512 force;
+
+#define POS(N) \
+                neighborPosX = _mm512_extload_ps(neighborPosXVec + N, _MM_UPCONV_PS_NONE, _MM_BROADCAST_1X16, _MM_HINT_NONE);\
+                neighborPosY = _mm512_extload_ps(neighborPosYVec + N, _MM_UPCONV_PS_NONE, _MM_BROADCAST_1X16, _MM_HINT_NONE);\
+                neighborPosZ = _mm512_extload_ps(neighborPosZVec + N, _MM_UPCONV_PS_NONE, _MM_BROADCAST_1X16, _MM_HINT_NONE);\
+\
+                deltaX = _mm512_sub_ps(oldSelfPosX, neighborPosX);\
+                deltaY = _mm512_sub_ps(oldSelfPosY, neighborPosY);\
+                deltaZ = _mm512_sub_ps(oldSelfPosZ, neighborPosZ);\
+                dist2 = _mm512_fmadd_ps(forceOffset, deltaX, deltaX);\
+                dist2 = _mm512_fmadd_ps(dist2, deltaY, deltaY);\
+                dist2 = _mm512_fmadd_ps(dist2, deltaZ, deltaZ);\
+                __m512 BOOST_PP_CAT(force, N) = _mm512_rsqrt23_ps(dist2);\
+                /**/
+#define POS2(N)\
+                myVelX = _mm512_fmadd_ps(myVelX, BOOST_PP_CAT(force, N), deltaX);\
+                myVelY = _mm512_fmadd_ps(myVelY, BOOST_PP_CAT(force, N), deltaY);\
+                myVelZ = _mm512_fmadd_ps(myVelZ, BOOST_PP_CAT(force, N), deltaZ)\
+                /**/
+                POS(0); POS(1); POS(2); POS(3); POS(4); POS(5); POS(6); POS(7);
+                POS(8); POS(9); POS(10); POS(11); POS(12); POS(13); POS(14); POS(15);
+                POS2(0); POS2(1); POS2(2); POS2(3); POS2(4); POS2(5); POS2(6); POS2(7);
+                POS2(8); POS2(9); POS2(10); POS2(11); POS2(12); POS2(13); POS2(14); POS2(15);
+#undef POS
+#undef POS2
             }
 
-            _mm512_store_ps(target->velX + i, myVelX);
-            _mm512_store_ps(target->velY + i, myVelY);
-            _mm512_store_ps(target->velZ + i, myVelZ);
+            _mm512_storenrngo_ps(target->velX + i, myVelX);
+            _mm512_storenrngo_ps(target->velY + i, myVelY);
+            _mm512_storenrngo_ps(target->velZ + i, myVelZ);
         }
     }
     

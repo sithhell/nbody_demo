@@ -119,7 +119,11 @@ int main(int argc, char **argv)
 #endif
     
     float factor = pow(size, 1.0/3.0);
+#ifdef HPX_NATIVE_MIC
+    Coord<3> baseDim(5, 5, 5);
+#else
     Coord<3> baseDim(10, 10, 10);
+#endif
     Coord<3> dim(factor * baseDim.x(), factor * baseDim.y(), factor * baseDim.z()); 
 
 #ifdef HPX_NATIVE_MIC

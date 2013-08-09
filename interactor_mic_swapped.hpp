@@ -13,22 +13,24 @@ public:
     void operator()(CONTAINER *target, const CONTAINER& oldSelf, const CONTAINER& neighbor)
     {
         const __m512 forceOffset = _mm512_set1_ps(FORCE_OFFSET);
+
 #ifndef NO_OMP
 #pragma omp parallel for schedule(static)
 #endif
         for (int j = 0; j < CONTAINER_SIZE; ++j) {
-            __m512 neighborPosX = _mm512_set1_ps(neighbor.posX[j]);
-            __m512 neighborPosY = _mm512_set1_ps(neighbor.posY[j]);
-            __m512 neighborPosZ = _mm512_set1_ps(neighbor.posZ[j]);
-
+            __m512 oldSelfPosX = _mm512_set1_ps(oldSelf.posX[j]);
+            __m512 oldSelfPosY = _mm512_set1_ps(oldSelf.posY[j]);
+            __m512 oldSelfPosZ = _mm512_set1_ps(oldSelf.posZ[j]);
+            
+            __m512 myVelX = _mm512_set1_ps(0);
+            __m512 myVelY = _mm512_set1_ps(0);
+            __m512 myVelZ = _mm512_set1_ps(0);
+            
             for (int i = 0; i < CONTAINER_SIZE; i+=16) {
-                __m512 oldSelfPosX = _mm512_load_ps(oldSelf.posX + i);
-                __m512 oldSelfPosY = _mm512_load_ps(oldSelf.posY + i);
-                __m512 oldSelfPosZ = _mm512_load_ps(oldSelf.posZ + i);
-                __m512 myVelX = _mm512_load_ps(oldSelf.velX + i);
-                __m512 myVelY = _mm512_load_ps(oldSelf.velY + i);
-                __m512 myVelZ = _mm512_load_ps(oldSelf.velZ + i);
-
+                __m512 neighborPosX = _mm512_load_ps(neighbor.posX + i);
+                __m512 neighborPosY = _mm512_load_ps(neighbor.posY + i);
+                __m512 neighborPosZ = _mm512_load_ps(neighbor.posZ + i);
+                
                 __m512 deltaX = _mm512_sub_ps(oldSelfPosX, neighborPosX);
                 __m512 deltaY = _mm512_sub_ps(oldSelfPosY, neighborPosY);
                 __m512 deltaZ = _mm512_sub_ps(oldSelfPosZ, neighborPosZ);
@@ -39,34 +41,26 @@ public:
                 myVelX = _mm512_fmadd_ps(myVelX, force, deltaX);
                 myVelY = _mm512_fmadd_ps(myVelY, force, deltaY);
                 myVelZ = _mm512_fmadd_ps(myVelZ, force, deltaZ);
-                
-                _mm512_store_ps(target->velX + i, myVelX);
-                _mm512_store_ps(target->velY + i, myVelY);
-                _mm512_store_ps(target->velZ + i, myVelZ);
             }
+            
+            target->velX[j] = oldSelf.velX[j];
+            target->velY[j] = oldSelf.velY[j];
+            target->velZ[j] = oldSelf.velZ[j];
+            for (int index = 0; index < 16; ++index) {
+                target->velX[j] += reinterpret_cast<float*>(&myVelX)[index];
+                target->velY[j] += reinterpret_cast<float*>(&myVelY)[index];
+                target->velZ[j] += reinterpret_cast<float*>(&myVelZ)[index];
+            }
+            
+            target->posX[j] = oldSelf.posX[j] + target->velX[j];
+            target->posY[j] = oldSelf.posY[j] + target->velY[j];
+            target->posZ[j] = oldSelf.posZ[j] + target->velZ[j];
         }
     }
     
     template<typename CONTAINER>
     void move(CONTAINER *target, const CONTAINER& oldSelf)
     {
-        for (int i = 0; i < CONTAINER_SIZE; i += 16) {
-            __m512 posX = _mm512_load_ps(oldSelf.posX + i);
-            __m512 posY = _mm512_load_ps(oldSelf.posY + i);
-            __m512 posZ = _mm512_load_ps(oldSelf.posZ + i);
-            
-            __m512 velX = _mm512_load_ps(target->velX + i);
-            __m512 velY = _mm512_load_ps(target->velY + i);
-            __m512 velZ = _mm512_load_ps(target->velZ + i);
-
-            posX = _mm512_add_ps(posX, velX);
-            posY = _mm512_add_ps(posY, velY);
-            posZ = _mm512_add_ps(posZ, velZ);
-
-            _mm512_store_ps(target->posX + i, posX);
-            _mm512_store_ps(target->posY + i, posY);
-            _mm512_store_ps(target->posZ + i, posZ);
-        }
     }
 
 

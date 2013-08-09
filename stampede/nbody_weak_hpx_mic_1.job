@@ -7,24 +7,21 @@
 #SBATCH -n 1
 #SBATCH -t 01:00:00
 
-LIKWID_BASE="/work/02405/heller/likwid/likwid-pin -q -s 0x3f -c E:N:"
 APP="$WORK/build/nbody_demo/release-mic/bin/nbody_hpx_weak"
-APP="$APP -Ihpx.parcel.mpi.enable=1 -Ihpx.parcel.tcpip.enable=0 -Ihpx.stacks.use_guard_pages=0"
-APP="$APP -Ihpx.parcel.tcpip.enable=0 -Ihpx.stacks.use_guard_pages=0"
+APP="$APP -Ihpx.parcel.mpi.enable=1"
+APP="$APP -Ihpx.parcel.tcpip.enable=0"
 APP="$APP -Ihpx.stacks.use_guard_pages=0"
-APP="$APP -Inbody.overcommitfactor!=0.6"
+#APP="$APP -Inbody.overcommitfactor!=0.99"
 
 cores=61
 for threads_per_core in 1 2 3 4
 do
     num_threads=$(($cores * $threads_per_core))
-    #for threads in 61 60 48 32 16 8 4 2 1
-    for threads in 61
+    for threads in 61 60 48 32 16 8 4 2 1
     do
         n_threads=$(( $threads_per_core * $threads ))
-        LIKWID="${LIKWID_BASE}${num_threads}:${threads_per_core}:4"
         echo "Running with $threads_per_core : $threads : $n_threads"
-        $LIKWID $APP -t$n_threads 
+        $APP -t$n_threads --hpx:pu-step=4 --hpx:pu-offset=4
     done
 done
 
