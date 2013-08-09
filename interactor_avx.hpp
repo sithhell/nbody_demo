@@ -24,23 +24,48 @@ public:
             __m256 myVelY = _mm256_load_ps(oldSelf.velY + i);
             __m256 myVelZ = _mm256_load_ps(oldSelf.velZ + i);
 
-            for (int j = 0; j < CONTAINER_SIZE; ++j) {
-                __m256 neighborPosX = _mm256_set1_ps(neighbor.posX[j]);
-                __m256 neighborPosY = _mm256_set1_ps(neighbor.posY[j]);
-                __m256 neighborPosZ = _mm256_set1_ps(neighbor.posZ[j]);
-                __m256 deltaX = _mm256_sub_ps(oldSelfPosX, neighborPosX);
-                __m256 deltaY = _mm256_sub_ps(oldSelfPosY, neighborPosY);
-                __m256 deltaZ = _mm256_sub_ps(oldSelfPosZ, neighborPosZ);
-                __m256 dist2 = _mm256_add_ps(forceOffset,
-                                          _mm256_mul_ps(deltaX, deltaX));
-                dist2 = _mm256_add_ps(dist2,
-                                   _mm256_mul_ps(deltaY, deltaY));
-                dist2 = _mm256_add_ps(dist2,
-                                   _mm256_mul_ps(deltaZ, deltaZ));
-                __m256 force = _mm256_rsqrt_ps(dist2);
-                myVelX = _mm256_add_ps(myVelX, _mm256_mul_ps(force, deltaX));
-                myVelY = _mm256_add_ps(myVelY, _mm256_mul_ps(force, deltaY));
-                myVelZ = _mm256_add_ps(myVelZ, _mm256_mul_ps(force, deltaZ));
+            for (int j = 0; j < CONTAINER_SIZE; j+=8) {
+                const float * neighborPosXVec = neighbor.posX + j;
+                const float * neighborPosYVec = neighbor.posY + j;
+                const float * neighborPosZVec = neighbor.posZ + j;
+
+                __m256 neighborPosX;
+                __m256 neighborPosY;
+                __m256 neighborPosZ;
+                
+                __m256 deltaX;
+                __m256 deltaY;
+                __m256 deltaZ;
+                __m256 dist2;
+                __m256 force;
+
+#define POS(N) \
+                neighborPosX = _mm256_broadcast_ss(neighborPosXVec + N);\
+                neighborPosY = _mm256_broadcast_ss(neighborPosXVec + N);\
+                neighborPosZ = _mm256_broadcast_ss(neighborPosXVec + N);\
+                deltaX = _mm256_sub_ps(oldSelfPosX, neighborPosX);\
+                deltaY = _mm256_sub_ps(oldSelfPosY, neighborPosY);\
+                deltaZ = _mm256_sub_ps(oldSelfPosZ, neighborPosZ);\
+                dist2 = _mm256_add_ps(forceOffset,\
+                                          _mm256_mul_ps(deltaX, deltaX));\
+                dist2 = _mm256_add_ps(dist2,\
+                                   _mm256_mul_ps(deltaY, deltaY));\
+                dist2 = _mm256_add_ps(dist2,\
+                                   _mm256_mul_ps(deltaZ, deltaZ));\
+                force = _mm256_rsqrt_ps(dist2);\
+                myVelX = _mm256_add_ps(myVelX, _mm256_mul_ps(force, deltaX));\
+                myVelY = _mm256_add_ps(myVelY, _mm256_mul_ps(force, deltaY));\
+                myVelZ = _mm256_add_ps(myVelZ, _mm256_mul_ps(force, deltaZ));\
+                /**/
+                POS(0);
+                POS(1);
+                POS(2);
+                POS(3);
+                POS(4);
+                POS(5);
+                POS(6);
+                POS(7);
+#undef POS
             }
 
             _mm256_store_ps(target->velX + i, myVelX);

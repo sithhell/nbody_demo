@@ -94,12 +94,12 @@ public:
         INTERACTOR().move(this, oldSelf);
     }
 
-    FLOAT posX[CONTAINER_SIZE];
-    FLOAT posY[CONTAINER_SIZE];
-    FLOAT posZ[CONTAINER_SIZE];
-    FLOAT velX[CONTAINER_SIZE];
-    FLOAT velY[CONTAINER_SIZE];
-    FLOAT velZ[CONTAINER_SIZE];
+    FLOAT __attribute__((aligned(64))) posX[CONTAINER_SIZE];
+    FLOAT __attribute__((aligned(64))) posY[CONTAINER_SIZE];
+    FLOAT __attribute__((aligned(64))) posZ[CONTAINER_SIZE];
+    FLOAT __attribute__((aligned(64))) velX[CONTAINER_SIZE];
+    FLOAT __attribute__((aligned(64))) velY[CONTAINER_SIZE];
+    FLOAT __attribute__((aligned(64))) velZ[CONTAINER_SIZE];
 
     template <typename ARCHIVE>
     void serialize(ARCHIVE& ar, unsigned)

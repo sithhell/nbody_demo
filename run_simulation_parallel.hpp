@@ -10,6 +10,27 @@
 
 #include <libgeodecomp/misc/statistics.h>
 
+/*
+SuperVector<long> initialWeights(const long& items, const long& size) const
+{
+    int
+
+#ifndef NO_MPI
+    SuperVector<long> ret(size);
+    long lastPos = 0;
+
+    for (long i = 0; i < size; i++) {
+        long currentPos = items * (i + 1) / size;
+        ret[i] = currentPos - lastPos;
+        lastPos = currentPos;
+    }
+
+    return ret;
+#else
+#endif
+}
+*/
+
 template<typename CELL>
 void runSimulation(Coord<3> dim)
 {
@@ -62,7 +83,7 @@ void runSimulation(Coord<3> dim)
     }
 
     hpx::util::high_resolution_timer timer;
-    sim.init();
+    sim.init();//initialWeights(dim.prod(), size));
     double initTime = timer.elapsed();
 #ifndef NO_MPI
     if(MPILayer().rank() == 0)
