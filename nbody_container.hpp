@@ -4,7 +4,7 @@
 #include <boost/serialization/is_bitwise_serializable.hpp>
 
 template<int CONTAINER_SIZE, typename FLOAT_TYPE, typename INTERACTOR>
-class NBodyContainer
+class __attribute__((aligned(64)))  NBodyContainer
 {
 public:
     typedef FLOAT_TYPE FLOAT;
@@ -16,18 +16,27 @@ public:
     class API : public CellAPITraits::Fixed
     {};
 #else
-    class API : public CellAPITraits::Base
+    class API
+        : public APITraits::HasFixedCoordsOnlyUpdate
+        , public APITraits::HasSpeed
+        , public APITraits::HasStencil<Stencils::Moore<3, 1> >
+        , public APITraits::HasCubeTopology<3>
     {};
 #endif
-
-    static inline unsigned nanoSteps()
-    {
-        return 1;
-    }
 
     static const char * name()
     {
         return INTERACTOR::name();
+    }
+
+    static double speed()
+    {
+        char * speedStr = std::getenv("SPEED");
+        if(speedStr)
+        {
+            return boost::lexical_cast<double>(speedStr);
+        }
+        return 1.0;
     }
 
     inline NBodyContainer()

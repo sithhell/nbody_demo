@@ -7,8 +7,18 @@ g++ -Ofast -march=native -I /home/gentryx/libgeodecomp/src/ -L /home/gentryx/lib
 /bgsys/drivers/ppcfloor/comm/xl/bin/mpixlcxx   -I/bgsys/local/boost/1.47.0  -qthreaded -qhalt=e -O -DNDEBUG  main.cpp  -o main  -L/bgsys/local/boost/1.47.0/lib ~/libgeodecomp/build/Linux-ppc64/libgeodecomp.a -lboost_date_time-mt-1_47 -lboost_filesystem-mt-1_47 -lboost_system-mt-1_47 -lboost_thread-mt-1_47 -Wl,-Bstatic -lcxxmpich -lmpich -lopa -lmpl -Wl,-Bdynamic -lpami -Wl,-Bstatic -lSPI -lSPI_cnk -Wl,-Bdynamic -lrt -lpthread -lstdc++ -lpthread -lstdc++ -Wl,-rpath,/bgsys/local/boost/1.47.0/lib -I ~/libgeodecomp/src/ -qmaxmem=-1
 
 */
+#include <mpi.h>
+#include <hpx/config.hpp>
+#if defined(NO_OMP) && defined(NO_MPI)
+#include <libgeodecomp/parallelization/hpxsimulator.h>
+#include <hpx/hpx_main.hpp>
+#else
+#include <omp.h>
+#endif
 #include <libgeodecomp.h>
-//#include <pmmintrin.h>
+#include <immintrin.h>
+
+#include <hpx/util/high_resolution_timer.hpp>
 
 using namespace LibGeoDecomp;
 
@@ -56,371 +66,94 @@ using namespace LibGeoDecomp;
 #define FORCE_OFFSET 0.01
 
 
-template<int CONTAINER_SIZE, typename FLOAT>
-class InteractorScalar
-{
-public:
-    template<typename CONTAINER>
-    void operator()(CONTAINER *target, const CONTAINER& oldSelf, const CONTAINER& neighbor)
-    {
-        for (int i = 0; i < CONTAINER_SIZE; ++i) {
-            for (int j = 0; j < CONTAINER_SIZE; ++j) {
-                FLOAT deltaX = oldSelf.posX[i] - neighbor.posX[j];
-                FLOAT deltaY = oldSelf.posY[i] - neighbor.posY[j];
-                FLOAT deltaZ = oldSelf.posZ[i] - neighbor.posZ[j];
-                FLOAT dist2 =
-                    FORCE_OFFSET +
-                    deltaX * deltaX +
-                    deltaY * deltaY +
-                    deltaZ * deltaZ;
-                FLOAT force = 1 / sqrt(dist2);
-                target->velX[i] += force * deltaX;
-                target->velY[i] += force * deltaY;
-                target->velZ[i] += force * deltaZ;
-            }
-        }
-    }
-};
+#include "interactor_scalar.hpp"
+#include "interactor_scalar_swapped.hpp"
 
-template<int CONTAINER_SIZE, typename FLOAT>
-class InteractorScalarSwapped
-{
-public:
-    template<typename CONTAINER>
-    void operator()(CONTAINER *target, const CONTAINER& oldSelf, const CONTAINER& neighbor)
-    {
-        for (int j = 0; j < CONTAINER_SIZE; ++j) {
-            for (int i = 0; i < CONTAINER_SIZE; ++i) {
-                FLOAT deltaX = oldSelf.posX[i] - neighbor.posX[j];
-                FLOAT deltaY = oldSelf.posY[i] - neighbor.posY[j];
-                FLOAT deltaZ = oldSelf.posZ[i] - neighbor.posZ[j];
-                FLOAT dist2 =
-                    FORCE_OFFSET +
-                    deltaX * deltaX +
-                    deltaY * deltaY +
-                    deltaZ * deltaZ;
-                FLOAT force = 1 / sqrt(dist2);
-                target->velX[i] += force * deltaX;
-                target->velY[i] += force * deltaY;
-                target->velZ[i] += force * deltaZ;
-            }
-        }
-    }
-};
+#ifdef HPX_NATIVE_MIC
+#include "interactor_mic.hpp"
+#include "interactor_mic_swapped.hpp"
+#else
+#include "interactor_sse.hpp"
+#include "interactor_sse_swapped.hpp"
 
-/*
-template<int CONTAINER_SIZE>
-class InteractorSSE
-{
-public:
-    template<typename CONTAINER>
-    void operator()(CONTAINER *target, const CONTAINER& oldSelf, const CONTAINER& neighbor)
-    {
-        __m128 forceOffset = _mm_set1_ps(FORCE_OFFSET);
-#pragma omp parallel for schedule(static)
-        for (int i = 0; i < CONTAINER_SIZE; i += 4) {
-            __m128 oldSelfPosX = _mm_load_ps(oldSelf.posX + i);
-            __m128 oldSelfPosY = _mm_load_ps(oldSelf.posY + i);
-            __m128 oldSelfPosZ = _mm_load_ps(oldSelf.posZ + i);
-            __m128 myVelX = _mm_load_ps(oldSelf.velX + i);
-            __m128 myVelY = _mm_load_ps(oldSelf.velY + i);
-            __m128 myVelZ = _mm_load_ps(oldSelf.velZ + i);
+#include "interactor_avx.hpp"
+#include "interactor_avx_swapped.hpp"
+#endif
 
-            for (int j = 0; j < CONTAINER_SIZE; ++j) {
-                __m128 neighborPosX = _mm_set1_ps(neighbor.posX[j]);
-                __m128 neighborPosY = _mm_set1_ps(neighbor.posY[j]);
-                __m128 neighborPosZ = _mm_set1_ps(neighbor.posZ[j]);
-                __m128 deltaX = oldSelfPosX - neighborPosX;
-                __m128 deltaY = oldSelfPosY - neighborPosY;
-                __m128 deltaZ = oldSelfPosZ - neighborPosZ;
-                __m128 dist2 = _mm_add_ps(forceOffset,
-                                          _mm_mul_ps(deltaX, deltaX));
-                dist2 = _mm_add_ps(dist2,
-                                   _mm_mul_ps(deltaY, deltaY));
-                dist2 = _mm_add_ps(dist2,
-                                   _mm_mul_ps(deltaZ, deltaZ));
-                __m128 force = _mm_rsqrt_ps(dist2);
-                myVelX = _mm_add_ps(myVelX, _mm_mul_ps(force, deltaX));
-                myVelY = _mm_add_ps(myVelY, _mm_mul_ps(force, deltaY));
-                myVelZ = _mm_add_ps(myVelZ, _mm_mul_ps(force, deltaZ));
-            }
+//#include "interactor_qpx_swapped.hpp"
 
-            _mm_store_ps(target->velX + i, myVelX);
-            _mm_store_ps(target->velY + i, myVelY);
-            _mm_store_ps(target->velZ + i, myVelZ);
-        }
-    }
-};
+#include "nbody_container.hpp"
+#include "nbody_initializer.hpp"
 
-template<int CONTAINER_SIZE>
-class InteractorSSESwapped
-{
-public:
-    template<typename CONTAINER>
-    void operator()(CONTAINER *target, const CONTAINER& oldSelf, const CONTAINER& neighbor)
-    {
-        __m128 forceOffset = _mm_set1_ps(FORCE_OFFSET);
-#pragma omp parallel for schedule(static)
-        for (int i = 0; i < CONTAINER_SIZE; ++i) {
-            __m128 oldSelfPosX = _mm_set1_ps(oldSelf.posX[i]);
-            __m128 oldSelfPosY = _mm_set1_ps(oldSelf.posY[i]);
-            __m128 oldSelfPosZ = _mm_set1_ps(oldSelf.posZ[i]);
-            __m128 myVelX = _mm_set_ps(oldSelf.velX[i], 0, 0, 0);
-            __m128 myVelY = _mm_set_ps(oldSelf.velY[i], 0, 0, 0);
-            __m128 myVelZ = _mm_set_ps(oldSelf.velZ[i], 0, 0, 0);
+#if defined(NO_OMP) && defined(NO_MPI)
+#ifdef HPX_NATIVE_MIC
+typedef NBodyContainer<512, float, InteractorMIC<512, float> > CellType;
+#else
+typedef NBodyContainer<512, float, InteractorAVX<512, float> > CellType;
+#endif
+typedef NBodyInitializer<CellType> NBodyInitializerType;
+typedef HpxSimulator::HpxSimulator<CellType, HiParSimulator::RecursiveBisectionPartition<3> > SimulatorType;
+BOOST_CLASS_EXPORT_GUID(NBodyInitializerType, "NBodyInitializer");
 
-            for (int j = 0; j < CONTAINER_SIZE; j += 4) {
-                __m128 neighborPosX = _mm_load_ps(neighbor.posX + j);
-                __m128 neighborPosY = _mm_load_ps(neighbor.posY + j);
-                __m128 neighborPosZ = _mm_load_ps(neighbor.posZ + j);
-                __m128 deltaX = oldSelfPosX - neighborPosX;
-                __m128 deltaY = oldSelfPosY - neighborPosY;
-                __m128 deltaZ = oldSelfPosZ - neighborPosZ;
-                __m128 dist2 = _mm_add_ps(forceOffset,
-                                          _mm_mul_ps(deltaX, deltaX));
-                dist2 = _mm_add_ps(dist2,
-                                   _mm_mul_ps(deltaY, deltaY));
-                dist2 = _mm_add_ps(dist2,
-                                   _mm_mul_ps(deltaZ, deltaZ));
-                __m128 force = _mm_rsqrt_ps(dist2);
-                myVelX = _mm_add_ps(myVelX, _mm_mul_ps(force, deltaX));
-                myVelY = _mm_add_ps(myVelY, _mm_mul_ps(force, deltaY));
-                myVelZ = _mm_add_ps(myVelZ, _mm_mul_ps(force, deltaZ));
-            }
+LIBGEODECOMP_REGISTER_HPX_SIMULATOR_DECLARATION(
+    SimulatorType
+  , NBodySimulator
+);
 
-            float buf[4];
-            _mm_storeu_ps(buf, myVelX);
-            target->velX[i] = buf[0] + buf[1] + buf[2] + buf[3];
-            _mm_storeu_ps(buf, myVelY);
-            target->velY[i] = buf[0] + buf[1] + buf[2] + buf[3];
-            _mm_storeu_ps(buf, myVelZ);
-            target->velZ[i] = buf[0] + buf[1] + buf[2] + buf[3];
-        }
-    }
-};
-*/
-
-template<int CONTAINER_SIZE>
-class InteractorQPXSwapped
-{
-public:
-    template<typename CONTAINER>
-    void operator()(CONTAINER *target, const CONTAINER& oldSelf, const CONTAINER& neighbor)
-    {
-        vector4double forceOffset = {FORCE_OFFSET, FORCE_OFFSET, FORCE_OFFSET, FORCE_OFFSET};
-
-#pragma omp parallel for schedule(static)
-        for (int i = 0; i < CONTAINER_SIZE; ++i) {
-            vector4double oldSelfPosX = {oldSelf.posX[i], oldSelf.posX[i], oldSelf.posX[i], oldSelf.posX[i]};
-            vector4double oldSelfPosY = {oldSelf.posY[i], oldSelf.posY[i], oldSelf.posY[i], oldSelf.posY[i]};
-            vector4double oldSelfPosZ = {oldSelf.posZ[i], oldSelf.posZ[i], oldSelf.posZ[i], oldSelf.posZ[i]};
-
-            vector4double myVelX = {oldSelf.velX[i], 0, 0, 0};
-            vector4double myVelY = {oldSelf.velY[i], 0, 0, 0};
-            vector4double myVelZ = {oldSelf.velZ[i], 0, 0, 0};
-
-            for (long j = 0; j < CONTAINER_SIZE; j += 4) {
-                vector4double neighborPosX = vec_ld(j, (double*)neighbor.posX);
-                vector4double neighborPosY = vec_ld(j, (double*)neighbor.posY);
-                vector4double neighborPosZ = vec_ld(j, (double*)neighbor.posZ);
-
-                vector4double deltaX = vec_sub(oldSelfPosX, neighborPosX);
-                vector4double deltaY = vec_sub(oldSelfPosY, neighborPosY);
-                vector4double deltaZ = vec_sub(oldSelfPosZ, neighborPosZ);
-
-                vector4double dist2 = vec_add(forceOffset,
-                                              vec_mul(deltaX, deltaX));
-                dist2 = vec_add(dist2,
-                                vec_mul(deltaY, deltaY));
-                dist2 = vec_add(dist2,
-                                vec_mul(deltaZ, deltaZ));
-                // vector4double force = vec_rsqrte(dist2);
-                vector4double force = dist2;
-                myVelX = vec_add(myVelX, vec_mul(force, deltaX));
-                myVelY = vec_add(myVelY, vec_mul(force, deltaY));
-                myVelZ = vec_add(myVelZ, vec_mul(force, deltaZ));
-            }
-
-            double buf[4];
-            vec_st(myVelX, 0, buf);
-            target->velX[i] = buf[0] + buf[1] + buf[2] + buf[3];
-            vec_st(myVelY, 0, buf);
-            target->velY[i] = buf[0] + buf[1] + buf[2] + buf[3];
-            vec_st(myVelZ, 0, buf);
-            target->velZ[i] = buf[0] + buf[1] + buf[2] + buf[3];
-        }
-    }
-};
-
-template<int CONTAINER_SIZE, typename FLOAT_TYPE, typename INTERACTOR>
-class NBodyContainer
-{
-public:
-    typedef FLOAT_TYPE FLOAT;
-    static const int SIZE = CONTAINER_SIZE;
-
-    typedef Stencils::Moore<3, 1> Stencil;
-    typedef Topologies::Cube<3>::Topology Topology;
-//    class API : public CellAPITraits::Fixed
-//    {};
-    class API : public CellAPITraits::Base
-    {};
-
-    static inline unsigned nanoSteps()
-    {
-        return 1;
-    }
-
-    inline NBodyContainer()
-    {}
-
-    inline NBodyContainer(const Coord<3>& pos)
-    {
-        for (int i; i < CONTAINER_SIZE; ++i) {
-            posX[i] = (i         % 10) * 0.1 + pos.x();
-            posY[i] = ((i / 10)  % 10) * 0.1 + pos.y();
-            posZ[i] = ((i / 100) % 10) * 0.1 + pos.z();
-            velX[i] = pos.x();
-            velY[i] = pos.y();
-            velZ[i] = pos.z();
-        }
-    }
-
-    template<typename COORD_MAP>
-    void update(const COORD_MAP& hood, const unsigned& nanoStep)
-    {
-        const NBodyContainer& oldSelf = hood[FixedCoord<0, 0, 0>()];
-
-        for (int i = 0; i < CONTAINER_SIZE; ++i) {
-            velX[i] = oldSelf.velX[i];
-            velY[i] = oldSelf.velY[i];
-            velZ[i] = oldSelf.velZ[i];
-        }
-
-#define INTERACT(REL_X, REL_Y, REL_Z) \
-        INTERACTOR()(this, oldSelf, hood[FixedCoord<REL_X, REL_Y, REL_Z>()]);
-
-        INTERACT(-1, -1, -1);
-        INTERACT( 0, -1, -1);
-        INTERACT( 1, -1, -1);
-        INTERACT(-1,  0, -1);
-        INTERACT( 0,  0, -1);
-        INTERACT( 1,  0, -1);
-        INTERACT(-1,  1, -1);
-        INTERACT( 0,  1, -1);
-        INTERACT( 1,  1, -1);
-
-        INTERACT(-1, -1,  0);
-        INTERACT( 0, -1,  0);
-        INTERACT( 1, -1,  0);
-        INTERACT(-1,  0,  0);
-        INTERACT( 0,  0,  0);
-        INTERACT( 1,  0,  0);
-        INTERACT(-1,  1,  0);
-        INTERACT( 0,  1,  0);
-        INTERACT( 1,  1,  0);
-
-        INTERACT(-1, -1,  1);
-        INTERACT( 0, -1,  1);
-        INTERACT( 1, -1,  1);
-        INTERACT(-1,  0,  1);
-        INTERACT( 0,  0,  1);
-        INTERACT( 1,  0,  1);
-        INTERACT(-1,  1,  1);
-        INTERACT( 0,  1,  1);
-        INTERACT( 1,  1,  1);
-
-        for (int i = 0; i < CONTAINER_SIZE; ++i) {
-            posX[i] = oldSelf.posX[i] + velX[i];
-            posY[i] = oldSelf.posY[i] + velY[i];
-            posZ[i] = oldSelf.posZ[i] + velZ[i];
-        }
-
-    }
-
-    FLOAT posX[CONTAINER_SIZE];
-    FLOAT posY[CONTAINER_SIZE];
-    FLOAT posZ[CONTAINER_SIZE];
-    FLOAT velX[CONTAINER_SIZE];
-    FLOAT velY[CONTAINER_SIZE];
-    FLOAT velZ[CONTAINER_SIZE];
-};
-
-template<typename CELL>
-class NBodyInitializer : public SimpleInitializer<CELL>
-{
-public:
-    using SimpleInitializer<CELL>::gridDimensions;
-
-    NBodyInitializer(const Coord<3>& dim, unsigned steps) :
-        SimpleInitializer<CELL>(dim, steps)
-    {}
-
-    virtual void grid(GridBase<CELL, 3> *ret)
-    {
-        CoordBox<3> box = ret->boundingBox();
-        for (CoordBox<3>::Iterator i = box.begin(); i != box.end(); ++i) {
-            ret->at(*i) = CELL(*i);
-        }
-    }
-};
-
-template<typename CELL>
-void runSimulation()
-{
-    int outputFrequency = 2;
-    int maxSteps = 200;
-    Coord<3> dim(90, 90, 90);
-
-    MPI::Aint displacements[] = {0};
-    MPI::Datatype memberTypes[] = {MPI::CHAR};
-    int lengths[] = { sizeof(CELL) };
-    MPI::Datatype objType;
-    objType =
-        MPI::Datatype::Create_struct(1, lengths, displacements, memberTypes);
-    objType.Commit();
+LIBGEODECOMP_REGISTER_HPX_SIMULATOR(
+    SimulatorType
+  , NBodySimulator
+);
+#endif
 
 
-    NBodyInitializer<CELL> *init = new NBodyInitializer<CELL>(dim, maxSteps);
+#include "run_simulation_parallel.hpp"
 
-    HiParSimulator::HiParSimulator<CELL, HiParSimulator::RecursiveBisectionPartition<3> > sim(
-        init,
-        MPILayer().rank() ? 0 : new TracingBalancer(new NoOpBalancer()),
-        maxSteps,
-        1,
-        objType);
-
-    if (MPILayer().rank() == 0) {
-        std::cout << "ranks: " << MPILayer().size() << "\n"
-                  << "dim: " << dim << "\n";
-        sim.addWriter(
-            new TracingWriter<CELL>(outputFrequency, init->maxSteps()));
-    }
-
-    long long tStart = Chronometer::timeUSec();
-    sim.run();
-    long long tEnd = Chronometer::timeUSec();
-
-    double seconds = 1e-6 * (tEnd - tStart);
-    double flops =
-        // time steps * grid size
-        1.0 * maxSteps * dim.prod() *
-        // interactions per container update
-        27 * CELL::SIZE * CELL::SIZE *
-        // FLOPs per interaction
-        (3 + 6 + 1 + 6);
-    double gflops = 1e-9 * flops / seconds;
-    std::cout << "GFLOPS: " << gflops << "\n"
-              << "----------------------------------------------------------------------\n";
-}
 
 int main(int argc, char **argv)
 {
+#ifndef NO_MPI
     MPI_Init(&argc, &argv);
     Typemaps::initializeMaps();
+    std::size_t size = MPILayer().size();
+#else
+    std::size_t size = hpx::get_num_worker_threads();
+#endif
+    
+    Coord<3> dim(60, 60, 60);
 
-    runSimulation<NBodyContainer<128, double, InteractorScalar<128, double> > >();
+#ifdef HPX_NATIVE_MIC
+        runSimulation<NBodyContainer<512, float,  InteractorMIC<512, float> > >(dim);
+#else
+        runSimulation<NBodyContainer<512, float,  InteractorAVX<512, float> > >(dim);
+#endif
+        // runSimulation<NBodyContainer<512, float, InteractorQPXSwapped<512> > >(dim);
 
+/*
+#ifdef HPX_NATIVE_MIC
+        runSimulation<NBodyContainer<512, float,  InteractorMIC<512> > >(dim);
+#else
+        runSimulation<NBodyContainer<512, float,  InteractorAVX<512> > >(dim);
+#endif
+        // runSimulation<NBodyContainer<512, float, InteractorQPXSwapped<512> > >(dim);
+
+#ifdef HPX_NATIVE_MIC
+        runSimulation<NBodyContainer<512, float,  InteractorMIC<512> > >(dim);
+#else
+        runSimulation<NBodyContainer<512, float,  InteractorAVX<512> > >(dim);
+#endif
+        // runSimulation<NBodyContainer<512, float, InteractorQPXSwapped<512> > >(dim);
+
+#ifdef HPX_NATIVE_MIC
+        runSimulation<NBodyContainer<1024, float,  InteractorMIC<1024> > >(dim);
+#else
+        runSimulation<NBodyContainer<1024, float,  InteractorAVX<1024> > >(dim);
+#endif
+        // runSimulation<NBodyContainer<1024, float, InteractorQPXSwapped<1024> > >(dim);
+*/
+
+#ifndef NO_MPI
     MPI_Finalize();
+#endif
     return 0;
 }

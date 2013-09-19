@@ -21,7 +21,7 @@ public:
     {
         CoordBox<3> box = ret->boundingBox();
         for (CoordBox<3>::Iterator i = box.begin(); i != box.end(); ++i) {
-            ret->at(*i) = CELL(*i);
+            ret->get(*i) = CELL(*i);
         }
     }
 

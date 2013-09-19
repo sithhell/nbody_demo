@@ -7,8 +7,9 @@ g++ -Ofast -march=native -I /home/gentryx/libgeodecomp/src/ -L /home/gentryx/lib
 /bgsys/drivers/ppcfloor/comm/xl/bin/mpixlcxx   -I/bgsys/local/boost/1.47.0  -qthreaded -qhalt=e -O -DNDEBUG  main.cpp  -o main  -L/bgsys/local/boost/1.47.0/lib ~/libgeodecomp/build/Linux-ppc64/libgeodecomp.a -lboost_date_time-mt-1_47 -lboost_filesystem-mt-1_47 -lboost_system-mt-1_47 -lboost_thread-mt-1_47 -Wl,-Bstatic -lcxxmpich -lmpich -lopa -lmpl -Wl,-Bdynamic -lpami -Wl,-Bstatic -lSPI -lSPI_cnk -Wl,-Bdynamic -lrt -lpthread -lstdc++ -lpthread -lstdc++ -Wl,-rpath,/bgsys/local/boost/1.47.0/lib -I ~/libgeodecomp/src/ -qmaxmem=-1
 
 */
-#ifdef NO_OMP
+#include <mpi.h>
 #include <hpx/config.hpp>
+#ifdef NO_OMP
 #include <hpx/hpx.hpp>
 #include <hpx/hpx_main.hpp>
 #else

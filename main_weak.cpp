@@ -7,6 +7,8 @@ g++ -Ofast -march=native -I /home/gentryx/libgeodecomp/src/ -L /home/gentryx/lib
 /bgsys/drivers/ppcfloor/comm/xl/bin/mpixlcxx   -I/bgsys/local/boost/1.47.0  -qthreaded -qhalt=e -O -DNDEBUG  main.cpp  -o main  -L/bgsys/local/boost/1.47.0/lib ~/libgeodecomp/build/Linux-ppc64/libgeodecomp.a -lboost_date_time-mt-1_47 -lboost_filesystem-mt-1_47 -lboost_system-mt-1_47 -lboost_thread-mt-1_47 -Wl,-Bstatic -lcxxmpich -lmpich -lopa -lmpl -Wl,-Bdynamic -lpami -Wl,-Bstatic -lSPI -lSPI_cnk -Wl,-Bdynamic -lrt -lpthread -lstdc++ -lpthread -lstdc++ -Wl,-rpath,/bgsys/local/boost/1.47.0/lib -I ~/libgeodecomp/src/ -qmaxmem=-1
 
 */
+#include <mpi.h>
+#include <hpx/config.hpp>
 #if defined(NO_OMP) && defined(NO_MPI)
 #include <libgeodecomp/parallelization/hpxsimulator.h>
 #include <hpx/hpx_main.hpp>
@@ -102,6 +104,8 @@ LIBGEODECOMP_REGISTER_HPX_SIMULATOR(
     SimulatorType
   , NBodySimulator
 );
+typedef TracingWriter<CellType> NbodyTracingWriter;
+BOOST_CLASS_EXPORT(NbodyTracingWriter)
 #endif
 
 
@@ -117,13 +121,15 @@ int main(int argc, char **argv)
 #else
     std::size_t size = hpx::get_num_worker_threads();
 #endif
+
+    char * scaleSize = std::getenv("SCALE_PROCS");
+    if(scaleSize)
+    {
+        size = boost::lexical_cast<std::size_t>(scaleSize);
+    }
     
     float factor = pow(size, 1.0/3.0);
-#ifdef HPX_NATIVE_MIC
-    Coord<3> baseDim(5, 5, 5);
-#else
     Coord<3> baseDim(10, 10, 10);
-#endif
     Coord<3> dim(factor * baseDim.x(), factor * baseDim.y(), factor * baseDim.z()); 
 
 #ifdef HPX_NATIVE_MIC
@@ -135,11 +141,11 @@ int main(int argc, char **argv)
 
 /*
 #ifdef HPX_NATIVE_MIC
-        runSimulation<NBodyContainer<256, float,  InteractorMIC<256> > >(dim);
+        runSimulation<NBodyContainer<128, float,  InteractorMIC<128> > >(dim);
 #else
-        runSimulation<NBodyContainer<256, float,  InteractorAVX<256> > >(dim);
+        runSimulation<NBodyContainer<128, float,  InteractorAVX<128> > >(dim);
 #endif
-        // runSimulation<NBodyContainer<256, float, InteractorQPXSwapped<256> > >(dim);
+        // runSimulation<NBodyContainer<128, float, InteractorQPXSwapped<128> > >(dim);
 
 #ifdef HPX_NATIVE_MIC
         runSimulation<NBodyContainer<128, float,  InteractorMIC<128> > >(dim);

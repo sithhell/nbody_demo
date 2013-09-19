@@ -13,33 +13,30 @@ cat >nbody_weak_hpx_${i}.job<<EOF
 #SBATCH -n $i
 #SBATCH -t 01:00:00
 
-APP="\$WORK/build/nbody_demo/release-host/bin/nbody_hpx_weak -Ihpx.parcel.mpi.enable=1 -Ihpx.parcel.tcpip.enable=0 -Ihpx.stacks.use_guard_pages=0"
-PERFCTRS="--hpx:print-counter /agas{locality#*/total}/count/cache-evictions"
-PERFCTRS="\$PERFCTRS --hpx:print-counter /agas{locality#*/total}/count/cache-hits"
-PERFCTRS="\$PERFCTRS --hpx:print-counter /agas{locality#*/total}/count/cache-insertions"
-PERFCTRS="\$PERFCTRS --hpx:print-counter /agas{locality#*/total}/count/cache-misses"
-#PERFCTRS="\$PERFCTRS --hpx:print-counter-interval 20"
-
-ibrun numactl --interleave=0,1 \$APP \$PERFCTRS
+APP_HOST="$WORK/nbody_demo/stampede/run_nbody_hpx_weak_host.sh"
+ibrun \$APP_HOST
 
 EOF
 
-cat >nbody_weak_hpx_tcp_${i}.job<<EOF
+cat >nbody_weak_hpx_symm_${i}.job<<EOF
 #!/bin/bash
-#SBATCH -J nbody_weak_hpx_tcp_${i}
-#SBATCH -o nbody_weak_hpx_tcp_${i}.o%j
-#SBATCH -e nbody_weak_hpx_tcp_${i}.e%j
-#SBATCH -p normal
+#SBATCH -J nbody_weak_hpx_symm_${i}
+#SBATCH -o nbody_weak_hpx_symm_${i}.o%j
+#SBATCH -e nbody_weak_hpx_symm_${i}.e%j
+#SBATCH -p normal-mic
 #SBATCH -N $i
 #SBATCH -n $i
 #SBATCH -t 01:00:00
 
-HOSTS=\`scontrol show hostname\`
-APP="\$WORK/build/nbody_demo/release-host/bin/nbody_hpx_weak --hpx:nodes \$HOSTS --hpx:endnodes -Ihpx.stacks.use_guard_pages=0"
+export DAPL_UCM_REP_TIME=8000
+export DAPL_UCM_RTU_TIME=4000
+export DAPL_UCM_RETRY=10
 
-ibrun -n 1 -o 0 numactl --interleave=0,1 \$APP --hpx:console --hpx:iftransform="s/^c/i" &
-ibrun -n $(($i - 1)) -o 1 numactl --interleave=0,1 \$APP --hpx:worker --hpx:iftransform="s/^c/i" &
-wait
+APP_HOST="$WORK/nbody_demo/stampede/run_nbody_hpx_weak_host.sh"
+APP_MIC="$WORK/nbody_demo/stampede/run_nbody_hpx_weak_mic.sh"
+#export SCALE_PROCS=$(($i *16 + $i * 60))
+export MIC_PPN=1
+ibrun.symm -c \$APP_HOST -m \$APP_MIC
 
 EOF
 
@@ -49,13 +46,37 @@ cat >nbody_weak_mpi_${i}.job<<EOF
 #SBATCH -o nbody_weak_mpi_${i}.o%j
 #SBATCH -e nbody_weak_mpi_${i}.e%j
 #SBATCH -p normal
+#SBATCH -N $i
 #SBATCH -n $(($i*16))
 #SBATCH -t 01:00:00
 
-APP="\$WORK/build/nbody_demo/release-host/bin/nbody_mpi_weak"
+APP_HOST="$WORK/nbody_demo/stampede/run_nbody_mpi_weak_host.sh"
 
-ibrun \$APP
+export SCALE_PROCS=$(($i *16))
+ibrun \$APP_HOST
 
 EOF
+
+cat >nbody_weak_mpi_symm_${i}.job<<EOF
+#!/bin/bash
+#SBATCH -J nbody_weak_mpi_symm_${i}
+#SBATCH -o nbody_weak_mpi_symm_${i}.o%j
+#SBATCH -e nbody_weak_mpi_symm_${i}.e%j
+#SBATCH -p normal-mic
+#SBATCH -N $i
+#SBATCH -n $(($i*8))
+#SBATCH -t 01:00:00
+
+source $WORK/nbody_demo/stampede/mpi_config.sh
+APP_HOST="$WORK/nbody_demo/stampede/run_nbody_mpi_weak_host.sh"
+APP_MIC="$WORK/nbody_demo/stampede/run_nbody_mpi_weak_mic.sh"
+export SCALE_PROCS=$(($i *16 + $i * 60))
+export MIC_PPN=8
+export MIC_OMP_NUM_THREADS=30
+export OMP_NUM_THREADS=8
+ibrun.symm -c \$APP_HOST -m \$APP_MIC
+
+EOF
+    
 done
 

@@ -9,27 +9,21 @@
 #include <boost/foreach.hpp>
 
 #include <libgeodecomp/misc/statistics.h>
+#include <libgeodecomp/io/tracingwriter.h>
 
-/*
-SuperVector<long> initialWeights(const long& items, const long& size) const
+#if defined(NO_MPI) && defined(NO_OMP)
+struct NumUpdateGroups
 {
-    int
-
-#ifndef NO_MPI
-    SuperVector<long> ret(size);
-    long lastPos = 0;
-
-    for (long i = 0; i < size; i++) {
-        long currentPos = items * (i + 1) / size;
-        ret[i] = currentPos - lastPos;
-        lastPos = currentPos;
-    }
-
-    return ret;
+    std::size_t operator()() const
+    {
+#ifdef HPX_NATIVE_MIC
+        return boost::lexical_cast<std::size_t>(hpx::get_config_entry("nbody.micUpdateGroups", "1"));
 #else
+        return boost::lexical_cast<std::size_t>(hpx::get_config_entry("nbody.hostUpdateGroups", "1"));
 #endif
-}
-*/
+    }
+};
+#endif
 
 template<typename CELL>
 void runSimulation(Coord<3> dim)
@@ -49,7 +43,7 @@ void runSimulation(Coord<3> dim)
     
     HpxSimulator::HpxSimulator<CELL, HiParSimulator::RecursiveBisectionPartition<3> > sim(
         init,
-        boost::lexical_cast<float>(hpx::get_config_entry("nbody.overcommitfactor", "1.0")), // overcommit Factor
+        NumUpdateGroups(),
         0,//MPILayer().rank() ? 0 : new TracingBalancer(new NoOpBalancer()),
         maxSteps,
         1);
@@ -74,13 +68,11 @@ void runSimulation(Coord<3> dim)
     if (MPILayer().rank() == 0)
 #endif
     {
-        std::cout << "ranks: " <<  size << "\n"
+        std::cout <<  size << " cores\n"
                   << "dim: " << dim << "\n";
-        /*
-        sim.addWriter(
-            new TracingWriter<CELL>(outputFrequency, init->maxSteps()));
-        */
     }
+    sim.addWriter(
+        new TracingWriter<CELL>(outputFrequency, init->maxSteps()));
 
     hpx::util::high_resolution_timer timer;
     sim.init();//initialWeights(dim.prod(), size));
@@ -101,14 +93,15 @@ void runSimulation(Coord<3> dim)
     double seconds = timer.elapsed();
 
 
-    unsigned long long flops =
+    double flops =
         // time steps * grid size
         
         // interactions per container update
-        27 * CELL::SIZE * CELL::SIZE *
+        27. * static_cast<double>(CELL::SIZE) * static_cast<double>(CELL::SIZE) *
         // FLOPs per interaction
-        (3 + 6 + 1 + 6);
-    double gflops =maxSteps * dim.prod() * (flops / (seconds * 1e9));
+        (3. + 6. + 1. + 6.);
+    double dimProd = static_cast<double>(dim.x()) * static_cast<double>(dim.y()) * static_cast<double>(dim.z());
+    double gflops =maxSteps * dimProd * (flops / (seconds * 1e9));
 #ifndef NO_MPI
     SuperVector<Statistics> updateGroupTimes = sim.gatherStatistics();
     
