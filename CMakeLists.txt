@@ -49,11 +49,13 @@ include_directories(.)
 include_directories(${HPX_INCLUDE_DIR})
 include_directories(${LIBGEODECOMP_INCLUDE_DIR})
 
-set(HPX_RPATH "${CMAKE_INSTALL_PREFIX}/lib/hpx:${CMAKE_BINARY_DIR}/lib/hpx:${LIBGEODECOMP_LIB_DIR}/lib/hpx")
+set(HPX_RPATH "${CMAKE_INSTALL_PREFIX}/lib/hpx:${CMAKE_BINARY_DIR}/lib/hpx:${LIBGEODECOMP_LIB_DIR}")
 link_directories(${CMAKE_BINARY_DIR}/lib/hpx)
 link_directories(${HPX_LIBRARY_DIR})
 
-link_directories(${LIBGEODECOMP_LIB_DIR}/lib/hpx)
+link_directories(${LIBGEODECOMP_LIB_DIR})
+
+add_definitions(-DQT_NO_KEYWORDS)
 
 add_hpx_executable(
     nbody_smp
@@ -109,4 +111,41 @@ add_hpx_executable(
     DEPENDENCIES
         ${LOCAL_LIBGEODECOMP_LINK_LIB}
     FOLDER "nbody HPX Weak"
+)
+
+add_hpx_executable(
+    nbody_mpi_strong
+    ESSENTIAL
+    SOURCES main_strong.cpp
+    HEADERS
+        interactor_scalar.hpp
+        interactor_scalar_swapped.hpp
+        interactor_sse.hpp
+        interactor_sse_swapped.hpp
+        nbody_container.hpp
+        nbody_initializer.hpp
+        run_simulation.hpp
+    COMPILE_FLAGS -openmp
+    LINK_FLAGS -openmp
+    DEPENDENCIES
+        ${LOCAL_LIBGEODECOMP_LINK_LIB}
+    FOLDER "nbody MPI Strong"
+)
+
+add_hpx_executable(
+    nbody_hpx_strong
+    ESSENTIAL
+    SOURCES main_strong.cpp
+    HEADERS
+        interactor_scalar.hpp
+        interactor_scalar_swapped.hpp
+        interactor_sse.hpp
+        interactor_sse_swapped.hpp
+        nbody_container.hpp
+        nbody_initializer.hpp
+        run_simulation.hpp
+    COMPILE_FLAGS "-DNO_OMP -DNO_MPI -DHPX_LIMIT=15"
+    DEPENDENCIES
+        ${LOCAL_LIBGEODECOMP_LINK_LIB}
+    FOLDER "nbody HPX Strong"
 )

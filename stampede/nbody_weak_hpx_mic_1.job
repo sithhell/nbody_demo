@@ -2,19 +2,20 @@
 #SBATCH -J nbody_weak_hpx_mic_1
 #SBATCH -o nbody_weak_hpx_mic_1.o%j
 #SBATCH -e nbody_weak_hpx_mic_1.e%j
-#SBATCH -p normal-mic
+#SBATCH -p development
 #SBATCH -N 1
 #SBATCH -n 1
-#SBATCH -t 01:00:00
+#SBATCH -t 04:00:00
 
 APP="$WORK/build/nbody_demo/release-mic/bin/nbody_hpx_weak"
 APP="$APP -Ihpx.parcel.mpi.enable=1"
 APP="$APP -Ihpx.parcel.tcpip.enable=0"
 APP="$APP -Ihpx.stacks.use_guard_pages=0"
+APP="$APP -Ihpx.stacks.small_size=0x10000"
 #APP="$APP -Inbody.overcommitfactor!=0.99"
 
 cores=61
-for threads_per_core in 1 2 3 4
+for threads_per_core in 2 3 4
 do
     num_threads=$(($cores * $threads_per_core))
     for threads in 61 60 48 32 16 8 4 2 1
