@@ -41,8 +41,8 @@ public:
 
 #define POS(N) \
                 neighborPosX = _mm256_broadcast_ss(neighborPosXVec + N);\
-                neighborPosY = _mm256_broadcast_ss(neighborPosXVec + N);\
-                neighborPosZ = _mm256_broadcast_ss(neighborPosXVec + N);\
+                neighborPosY = _mm256_broadcast_ss(neighborPosYVec + N);\
+                neighborPosZ = _mm256_broadcast_ss(neighborPosZVec + N);\
                 deltaX = _mm256_sub_ps(oldSelfPosX, neighborPosX);\
                 deltaY = _mm256_sub_ps(oldSelfPosY, neighborPosY);\
                 deltaZ = _mm256_sub_ps(oldSelfPosZ, neighborPosZ);\

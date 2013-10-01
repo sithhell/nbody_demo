@@ -23,6 +23,18 @@ struct NumUpdateGroups
 #endif
     }
 };
+
+
+HPX_UTIL_REGISTER_FUNCTION_DECLARATION(
+    std::size_t(),
+    NumUpdateGroups,
+    NumUpdateGroups)
+
+HPX_UTIL_REGISTER_FUNCTION(
+    std::size_t(),
+    NumUpdateGroups,
+    NumUpdateGroups)
+
 #endif
 
 template<typename CELL>
@@ -72,7 +84,7 @@ void runSimulation(Coord<3> dim)
                   << "dim: " << dim << "\n";
     }
     sim.addWriter(
-        new TracingWriter<CELL>(outputFrequency, init->maxSteps()));
+        new TracingWriter<CELL>(outputFrequency, init->maxSteps(), 0));
 
     hpx::util::high_resolution_timer timer;
     sim.init();//initialWeights(dim.prod(), size));
@@ -103,7 +115,7 @@ void runSimulation(Coord<3> dim)
     double dimProd = static_cast<double>(dim.x()) * static_cast<double>(dim.y()) * static_cast<double>(dim.z());
     double gflops =maxSteps * dimProd * (flops / (seconds * 1e9));
 #ifndef NO_MPI
-    SuperVector<Statistics> updateGroupTimes = sim.gatherStatistics();
+    std::vector<Statistics> updateGroupTimes = sim.gatherStatistics();
     
     if(MPILayer().rank() != 0)
     {
