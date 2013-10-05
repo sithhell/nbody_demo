@@ -69,8 +69,8 @@ add_hpx_executable(
         nbody_container.hpp
         nbody_initializer.hpp
         run_simulation.hpp
-    COMPILE_FLAGS -openmp
-    LINK_FLAGS -openmp
+    COMPILE_FLAGS -fopenmp
+    LINK_FLAGS -fopenmp
     DEPENDENCIES
         ${LOCAL_LIBGEODECOMP_LINK_LIB}
     FOLDER "nbody SMP"
@@ -88,8 +88,8 @@ add_hpx_executable(
         nbody_container.hpp
         nbody_initializer.hpp
         run_simulation.hpp
-    COMPILE_FLAGS -openmp
-    LINK_FLAGS -openmp
+    COMPILE_FLAGS -fopenmp
+    LINK_FLAGS -fopenmp
     DEPENDENCIES
         ${LOCAL_LIBGEODECOMP_LINK_LIB}
     FOLDER "nbody MPI Weak"
@@ -125,8 +125,8 @@ add_hpx_executable(
         nbody_container.hpp
         nbody_initializer.hpp
         run_simulation.hpp
-    COMPILE_FLAGS -openmp
-    LINK_FLAGS -openmp
+    COMPILE_FLAGS -fopenmp
+    LINK_FLAGS -fopenmp
     DEPENDENCIES
         ${LOCAL_LIBGEODECOMP_LINK_LIB}
     FOLDER "nbody MPI Strong"

@@ -115,13 +115,11 @@ int main(int argc, char **argv)
 #ifndef NO_MPI
     MPI_Init(&argc, &argv);
     Typemaps::initializeMaps();
-    std::size_t size = MPILayer().size();
-#else
-    std::size_t size = hpx::get_num_worker_threads();
 #endif
     
     Coord<3> dim(60, 60, 60);
 
+/*
 #ifdef HPX_NATIVE_MIC
         runSimulation<NBodyContainer<512, float,  InteractorMIC<512, float> > >(dim);
 #else
@@ -129,7 +127,6 @@ int main(int argc, char **argv)
 #endif
         // runSimulation<NBodyContainer<512, float, InteractorQPXSwapped<512> > >(dim);
 
-/*
 #ifdef HPX_NATIVE_MIC
         runSimulation<NBodyContainer<512, float,  InteractorMIC<512> > >(dim);
 #else
