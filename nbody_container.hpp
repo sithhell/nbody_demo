@@ -60,7 +60,7 @@ public:
     {
         const NBodyContainer& oldSelf = hood[FixedCoord<0, 0, 0>()];
 
-#pragma simd
+//#pragma simd
         for (int i = 0; i < CONTAINER_SIZE; ++i) {
             velX[i] = oldSelf.velX[i];
             velY[i] = oldSelf.velY[i];

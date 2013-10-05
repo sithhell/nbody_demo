@@ -5,8 +5,8 @@
 template<typename CELL>
 void runSimulation(Coord<3> dim)
 {
-    int outputFrequency = 100;
-    int maxSteps = 10;
+    //int outputFrequency = 100;
+    int maxSteps = 200;
 
     NBodyInitializer<CELL> *init = new NBodyInitializer<CELL>(dim, maxSteps);
 

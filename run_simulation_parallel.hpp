@@ -87,7 +87,8 @@ void runSimulation(Coord<3> dim)
         new TracingWriter<CELL>(outputFrequency, init->maxSteps(), 0));
 
     hpx::util::high_resolution_timer timer;
-    sim.init();//initialWeights(dim.prod(), size));
+    //sim.init();//initialWeights(dim.prod(), size));
+    sim.step();
     double initTime = timer.elapsed();
 #ifndef NO_MPI
     if(MPILayer().rank() == 0)

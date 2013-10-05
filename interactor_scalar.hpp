@@ -10,7 +10,7 @@ public:
     void operator()(CONTAINER *target, const CONTAINER& oldSelf, const CONTAINER& neighbor)
     {
         for (int i = 0; i < CONTAINER_SIZE; ++i) {
-#pragma simd
+//#pragma simd
             for (int j = 0; j < CONTAINER_SIZE; ++j) {
                 FLOAT deltaX = oldSelf.posX[i] - neighbor.posX[j];
                 FLOAT deltaY = oldSelf.posY[i] - neighbor.posY[j];
