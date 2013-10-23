@@ -21,16 +21,16 @@ public:
             __m256 oldSelfPosX = _mm256_set1_ps(oldSelf.posX[j]);
             __m256 oldSelfPosY = _mm256_set1_ps(oldSelf.posY[j]);
             __m256 oldSelfPosZ = _mm256_set1_ps(oldSelf.posZ[j]);
-            
+
             __m256 myVelX = _mm256_set1_ps(0);
             __m256 myVelY = _mm256_set1_ps(0);
             __m256 myVelZ = _mm256_set1_ps(0);
-            
+
             for (int i = 0; i < CONTAINER_SIZE; i+=8) {
                 __m256 neighborPosX = _mm256_load_ps(neighbor.posX + i);
                 __m256 neighborPosY = _mm256_load_ps(neighbor.posY + i);
                 __m256 neighborPosZ = _mm256_load_ps(neighbor.posZ + i);
-                
+
                 __m256 deltaX = _mm256_sub_ps(oldSelfPosX, neighborPosX);
                 __m256 deltaY = _mm256_sub_ps(oldSelfPosY, neighborPosY);
                 __m256 deltaZ = _mm256_sub_ps(oldSelfPosZ, neighborPosZ);
@@ -42,23 +42,23 @@ public:
                 myVelY = _mm256_add_ps(myVelY, _mm256_mul_ps(force, deltaY));
                 myVelZ = _mm256_add_ps(myVelZ, _mm256_mul_ps(force, deltaZ));
             }
-            
+
             target->velX[j] = oldSelf.velX[j];
             target->velY[j] = oldSelf.velY[j];
             target->velZ[j] = oldSelf.velZ[j];
-            
+
             for (int index = 0; index < 8; ++index) {
                 target->velX[j] += reinterpret_cast<float*>(&myVelX)[index];
                 target->velY[j] += reinterpret_cast<float*>(&myVelY)[index];
                 target->velZ[j] += reinterpret_cast<float*>(&myVelZ)[index];
             }
-            
+
             target->posX[j] = oldSelf.posX[j] + target->velX[j];
             target->posY[j] = oldSelf.posY[j] + target->velY[j];
             target->posZ[j] = oldSelf.posZ[j] + target->velZ[j];
         }
     }
-    
+
     template<typename CONTAINER>
     void move(CONTAINER *target, const CONTAINER& oldSelf)
     {
@@ -108,11 +108,24 @@ public:
                 myVelX = _mm256_add_pd(myVelX, _mm256_mul_pd(force, deltaX));
                 myVelY = _mm256_add_pd(myVelY, _mm256_mul_pd(force, deltaY));
                 myVelZ = _mm256_add_pd(myVelZ, _mm256_mul_pd(force, deltaZ));
-                
+
                 _mm256_store_pd(target->velX + i, myVelX);
                 _mm256_store_pd(target->velY + i, myVelY);
                 _mm256_store_pd(target->velZ + i, myVelZ);
             }
+
+            target->velX[j] = oldSelf->velX[j];
+            target->velY[j] = oldSelf->velY[j];
+            target->velZ[j] = oldSelf->velZ[j];
+            for (int index = 0; index < 8; ++index) {
+                target->velX[j] += reinterpret_cast<float*>(&myVelX)[index];
+                target->velY[j] += reinterpret_cast<float*>(&myVelY)[index];
+                target->velZ[j] += reinterpret_cast<float*>(&myVelZ)[index];
+            }
+
+            target->posX[j] = oldSelf->posX[j] + target->velX[j];
+            target->posY[j] = oldSelf->posY[j] + target->velY[j];
+            target->posZ[j] = oldSelf->posZ[j] + target->velZ[j];
         }
     }
 
