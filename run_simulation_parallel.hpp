@@ -8,7 +8,7 @@
 #include <boost/accumulators/statistics/variance.hpp>
 #include <boost/foreach.hpp>
 
-#include <libgeodecomp/misc/statistics.h>
+#include <libgeodecomp/misc/chronometer.h>
 #include <libgeodecomp/io/tracingwriter.h>
 
 #if defined(NO_MPI) && defined(NO_OMP)
@@ -53,7 +53,7 @@ void runSimulation(Coord<3> dim)
     }
 #ifdef NO_MPI
     
-    HpxSimulator::HpxSimulator<CELL, HiParSimulator::RecursiveBisectionPartition<3> > sim(
+    HpxSimulator::HpxSimulator<CELL, RecursiveBisectionPartition<3> > sim(
         init,
         NumUpdateGroups(),
         0,//MPILayer().rank() ? 0 : new TracingBalancer(new NoOpBalancer()),
@@ -68,7 +68,7 @@ void runSimulation(Coord<3> dim)
     objType =
         MPI::Datatype::Create_struct(1, lengths, displacements, memberTypes);
     objType.Commit();
-    HiParSimulator::HiParSimulator<CELL, HiParSimulator::RecursiveBisectionPartition<3> > sim(
+    HiParSimulator::HiParSimulator<CELL, RecursiveBisectionPartition<3> > sim(
         init,
         0,//MPILayer().rank() ? 0 : new TracingBalancer(new NoOpBalancer()),
         maxSteps,
@@ -97,10 +97,8 @@ void runSimulation(Coord<3> dim)
         std::cout << "initialization done in " << initTime << " seconds\n";
     }
     timer.restart();
-#ifdef NO_MPI
-    std::vector<Statistics> updateGroupTimes = sim.runTimed();
-#else
     sim.run();
+#ifndef NO_MPI
     MPILayer().barrier();
 #endif
     double seconds = timer.elapsed();
@@ -115,9 +113,10 @@ void runSimulation(Coord<3> dim)
         (3. + 6. + 1. + 6.);
     double dimProd = static_cast<double>(dim.x()) * static_cast<double>(dim.y()) * static_cast<double>(dim.z());
     double gflops =maxSteps * dimProd * (flops / (seconds * 1e9));
-#ifndef NO_MPI
-    std::vector<Statistics> updateGroupTimes = sim.gatherStatistics();
+
+    std::vector<Chronometer> updateGroupTimes = sim.gatherStatistics();
     
+#ifndef NO_MPI
     if(MPILayer().rank() != 0)
     {
         return;
@@ -142,13 +141,13 @@ void runSimulation(Coord<3> dim)
     AccumulatorType accComputeGhost;
     AccumulatorType accPatchProviders;
     AccumulatorType accPatchAccepters;
-    BOOST_FOREACH(const Statistics& stat, updateGroupTimes)
+    BOOST_FOREACH(const Chronometer& stat, updateGroupTimes)
     {
-        accTotal(stat.totalTime);
-        accComputeInner(stat.computeTimeInner);
-        accComputeGhost(stat.computeTimeGhost);
-        accPatchProviders(stat.patchProvidersTime);
-        accPatchAccepters(stat.patchAcceptersTime);
+        accTotal(stat.interval<LibGeoDecomp::TimeTotal>());
+        accComputeInner(stat.interval<LibGeoDecomp::TimeComputeInner>());
+        accComputeGhost(stat.interval<LibGeoDecomp::TimeComputeGhost>());
+        accPatchProviders(stat.interval<LibGeoDecomp::TimePatchProviders>());
+        accPatchAccepters(stat.interval<LibGeoDecomp::TimePatchAccepters>());
     }
     
     double timeMin  = (boost::accumulators::min)(accTotal);

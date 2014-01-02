@@ -92,7 +92,7 @@ typedef NBodyContainer<512, float, InteractorMIC<512, float> > CellType;
 typedef NBodyContainer<512, float, InteractorAVX<512, float> > CellType;
 #endif
 typedef NBodyInitializer<CellType> NBodyInitializerType;
-typedef HpxSimulator::HpxSimulator<CellType, HiParSimulator::RecursiveBisectionPartition<3> > SimulatorType;
+typedef HpxSimulator::HpxSimulator<CellType, RecursiveBisectionPartition<3> > SimulatorType;
 BOOST_CLASS_EXPORT_GUID(NBodyInitializerType, "NBodyInitializer");
 
 LIBGEODECOMP_REGISTER_HPX_SIMULATOR_DECLARATION(

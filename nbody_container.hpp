@@ -9,20 +9,13 @@ class __attribute__((aligned(64)))  NBodyContainer
 public:
     typedef FLOAT_TYPE FLOAT;
     static const int SIZE = CONTAINER_SIZE;
-
-    typedef Stencils::Moore<3, 1> Stencil;
-    typedef Topologies::Cube<3>::Topology Topology;
-#if 0
-    class API : public CellAPITraits::Fixed
-    {};
-#else
+    
     class API
         : public APITraits::HasFixedCoordsOnlyUpdate
-        , public APITraits::HasSpeed
+        //, public APITraits::HasSpeed
         , public APITraits::HasStencil<Stencils::Moore<3, 1> >
         , public APITraits::HasCubeTopology<3>
     {};
-#endif
 
     static const char * name()
     {
