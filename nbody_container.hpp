@@ -9,10 +9,11 @@ class __attribute__((aligned(64)))  NBodyContainer
 public:
     typedef FLOAT_TYPE FLOAT;
     static const int SIZE = CONTAINER_SIZE;
-    
+
     class API
         : public APITraits::HasFixedCoordsOnlyUpdate
         //, public APITraits::HasSpeed
+        , public APITraits::HasOpaqueMPIDataType<NBodyContainer>
         , public APITraits::HasStencil<Stencils::Moore<3, 1> >
         , public APITraits::HasCubeTopology<3>
     {};
