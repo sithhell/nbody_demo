@@ -40,7 +40,7 @@ HPX_UTIL_REGISTER_FUNCTION(
 template<typename CELL>
 void runSimulation(Coord<3> dim)
 {
-    int outputFrequency = 1;
+    int outputFrequency = 200;
     int maxSteps = 200;
 
     NBodyInitializer<CELL> *init = new NBodyInitializer<CELL>(dim, maxSteps);
@@ -52,7 +52,7 @@ void runSimulation(Coord<3> dim)
         std::cout << "running simulation\n";
     }
 #ifdef NO_MPI
-    
+
     HpxSimulator::HpxSimulator<CELL, RecursiveBisectionPartition<3> > sim(
         init,
         NumUpdateGroups(),
@@ -106,7 +106,7 @@ void runSimulation(Coord<3> dim)
 
     double flops =
         // time steps * grid size
-        
+
         // interactions per container update
         27. * static_cast<double>(CELL::SIZE) * static_cast<double>(CELL::SIZE) *
         // FLOPs per interaction
@@ -115,7 +115,7 @@ void runSimulation(Coord<3> dim)
     double gflops =maxSteps * dimProd * (flops / (seconds * 1e9));
 
     std::vector<Chronometer> updateGroupTimes = sim.gatherStatistics();
-    
+
 #ifndef NO_MPI
     if(MPILayer().rank() != 0)
     {
@@ -124,7 +124,7 @@ void runSimulation(Coord<3> dim)
 #endif
     typedef
         boost::accumulators::accumulator_set<
-            double, 
+            double,
             boost::accumulators::features<
                 boost::accumulators::tag::min,
                 boost::accumulators::tag::max,
@@ -149,27 +149,27 @@ void runSimulation(Coord<3> dim)
         accPatchProviders(stat.interval<LibGeoDecomp::TimePatchProviders>());
         accPatchAccepters(stat.interval<LibGeoDecomp::TimePatchAccepters>());
     }
-    
+
     double timeMin  = (boost::accumulators::min)(accTotal);
     double timeMax  = (boost::accumulators::max)(accTotal);
     double timeMean =  boost::accumulators::mean(accTotal);
     double timeVar =  std::sqrt(boost::accumulators::variance(accTotal));
-    
+
     double computeInnerMin  = (boost::accumulators::min)(accComputeInner);
     double computeInnerMax  = (boost::accumulators::max)(accComputeInner);
     double computeInnerMean =  boost::accumulators::mean(accComputeInner);
     double computeInnerVar =  std::sqrt(boost::accumulators::variance(accComputeInner));
-    
+
     double computeGhostMin  = (boost::accumulators::min)(accComputeGhost);
     double computeGhostMax  = (boost::accumulators::max)(accComputeGhost);
     double computeGhostMean =  boost::accumulators::mean(accComputeGhost);
     double computeGhostVar =  std::sqrt(boost::accumulators::variance(accComputeGhost));
-    
+
     double patchProvidersMin  = (boost::accumulators::min)(accPatchProviders);
     double patchProvidersMax  = (boost::accumulators::max)(accPatchProviders);
     double patchProvidersMean =  boost::accumulators::mean(accPatchProviders);
     double patchProvidersVar =  std::sqrt(boost::accumulators::variance(accPatchProviders));
-    
+
     double patchAcceptersMin  = (boost::accumulators::min)(accPatchAccepters);
     double patchAcceptersMax  = (boost::accumulators::max)(accPatchAccepters);
     double patchAcceptersMean =  boost::accumulators::mean(accPatchAccepters);
@@ -178,7 +178,7 @@ void runSimulation(Coord<3> dim)
     double gflopsMax  = maxSteps * dim.prod() * (flops / (timeMin * 1e9));
     double gflopsMin  = maxSteps * dim.prod() * (flops / (timeMax * 1e9));
     double gflopsMean = maxSteps * dim.prod() * (flops / (timeMean * 1e9));
-        
+
 #ifdef NO_MPI
     std::cout << "HPX Simulation finished in " << seconds << " seconds\n"
 #else
@@ -201,26 +201,26 @@ void runSimulation(Coord<3> dim)
               << std::left << std::setw(15) << timeVar
               << "\n"
               << "Compute Time Inner    "
-              << std::left << std::setw(15) << computeInnerMin 
-              << std::left << std::setw(15) << computeInnerMax 
+              << std::left << std::setw(15) << computeInnerMin
+              << std::left << std::setw(15) << computeInnerMax
               << std::left << std::setw(15) << computeInnerMean
               << std::left << std::setw(15) << computeInnerVar
               << "\n"
               << "Compute Time Ghost    "
-              << std::left << std::setw(15) << computeGhostMin 
-              << std::left << std::setw(15) << computeGhostMax 
+              << std::left << std::setw(15) << computeGhostMin
+              << std::left << std::setw(15) << computeGhostMax
               << std::left << std::setw(15) << computeGhostMean
               << std::left << std::setw(15) << computeGhostVar
               << "\n"
               << "PatchProviders Time   "
-              << std::left << std::setw(15) << patchProvidersMin 
-              << std::left << std::setw(15) << patchProvidersMax 
+              << std::left << std::setw(15) << patchProvidersMin
+              << std::left << std::setw(15) << patchProvidersMax
               << std::left << std::setw(15) << patchProvidersMean
               << std::left << std::setw(15) << patchProvidersVar
               << "\n"
               << "PatchAccepters Time   "
-              << std::left << std::setw(15) << patchAcceptersMin 
-              << std::left << std::setw(15) << patchAcceptersMax 
+              << std::left << std::setw(15) << patchAcceptersMin
+              << std::left << std::setw(15) << patchAcceptersMax
               << std::left << std::setw(15) << patchAcceptersMean
               << std::left << std::setw(15) << patchAcceptersVar
               << "\n"
