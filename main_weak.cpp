@@ -93,26 +93,30 @@ typedef NBodyContainer<128, float, InteractorAVX<128, float> > CellType;
 #endif
 typedef NBodyInitializer<CellType> NBodyInitializerType;
 typedef HpxSimulator::HpxSimulator<CellType, RecursiveBisectionPartition<3> > SimulatorType;
-BOOST_CLASS_EXPORT_GUID(NBodyInitializerType, "NBodyInitializer");
-
-LIBGEODECOMP_REGISTER_HPX_SIMULATOR_DECLARATION(
-    SimulatorType
-  , NBodySimulator
-);
-
-LIBGEODECOMP_REGISTER_HPX_SIMULATOR(
-    SimulatorType
-  , NBodySimulator
-);
-typedef TracingWriter<CellType> NbodyTracingWriter;
-BOOST_CLASS_EXPORT(NbodyTracingWriter)
+// BOOST_CLASS_EXPORT_GUID(NBodyInitializerType, "NBodyInitializer");
+//
+// LIBGEODECOMP_REGISTER_HPX_SIMULATOR_DECLARATION(
+//     SimulatorType
+//   , NBodySimulator
+// );
+//
+// LIBGEODECOMP_REGISTER_HPX_SIMULATOR(
+//     SimulatorType
+//   , NBodySimulator
+// );
+// typedef TracingWriter<CellType> NbodyTracingWriter;
+// BOOST_CLASS_EXPORT(NbodyTracingWriter)
 #endif
 
 
 #include "run_simulation_parallel.hpp"
 
 
+#ifdef NO_MPI
+int hpx_main(int argc, char **argv)
+#else
 int main(int argc, char **argv)
+#endif
 {
 #ifndef NO_MPI
     MPI_Init(&argc, &argv);
@@ -127,10 +131,10 @@ int main(int argc, char **argv)
     {
         size = boost::lexical_cast<std::size_t>(scaleSize);
     }
-    
+
     float factor = pow(size, 1.0/3.0);
     Coord<3> baseDim(10, 10, 10);
-    Coord<3> dim(factor * baseDim.x(), factor * baseDim.y(), factor * baseDim.z()); 
+    Coord<3> dim(factor * baseDim.x(), factor * baseDim.y(), factor * baseDim.z());
 
 #ifdef HPX_NATIVE_MIC
         runSimulation<NBodyContainer<128, float,  InteractorMIC<128, float> > >(dim);
@@ -167,3 +171,11 @@ int main(int argc, char **argv)
 #endif
     return 0;
 }
+
+#ifdef NO_MPI
+int main(int argc, char **argv)
+{
+    std::vector<std::string> config(1, "hpx.run_hpx_main!=1");
+    return hpx::init(argc, argv, config);
+}
+#endif

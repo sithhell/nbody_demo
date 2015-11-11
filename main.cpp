@@ -11,7 +11,7 @@ g++ -Ofast -march=native -I /home/gentryx/libgeodecomp/src/ -L /home/gentryx/lib
 #include <hpx/config.hpp>
 #ifdef NO_OMP
 #include <hpx/hpx.hpp>
-#include <hpx/hpx_main.hpp>
+#include <hpx/hpx_init.hpp>
 #else
 #include <omp.h>
 #endif
@@ -86,7 +86,11 @@ using namespace LibGeoDecomp;
 
 #include "run_simulation.hpp"
 
+#ifndef NO_MPI
 int main(int argc, char **argv)
+#else
+int hpx_main(int argc, char **argv)
+#endif
 {
     MPI_Init(&argc, &argv);
     Typemaps::initializeMaps();
@@ -150,3 +154,11 @@ int main(int argc, char **argv)
     MPI_Finalize();
     return 0;
 }
+
+#ifdef NO_MPI
+int main(int argc, char **argv)
+{
+    std::vector<std::string> config(1, "hpx.run_hpx_main!=1");
+    return hpx::init(argc, argv, config);
+}
+#endif
