@@ -47,6 +47,8 @@ void runSimulation(Coord<3> dim)
 
 #ifndef NO_MPI
     if(MPILayer().rank() == 0)
+#else
+    if(hpx::get_locality_id() == 0)
 #endif
     {
         std::cout << "running simulation\n";
@@ -55,11 +57,12 @@ void runSimulation(Coord<3> dim)
 
     HpxSimulator::HpxSimulator<CELL, RecursiveBisectionPartition<3> > sim(
         init,
-        NumUpdateGroups(),
+        std::vector<double>(NumUpdateGroups()(), 1.0),
         0,//MPILayer().rank() ? 0 : new TracingBalancer(new NoOpBalancer()),
         maxSteps,
         1);
     std::size_t size = hpx::get_num_worker_threads();
+    if(hpx::get_locality_id() == 0)
 #else
     MPI::Aint displacements[] = {0};
     MPI::Datatype memberTypes[] = {MPI::CHAR};
@@ -118,6 +121,11 @@ void runSimulation(Coord<3> dim)
 
 #ifndef NO_MPI
     if(MPILayer().rank() != 0)
+    {
+        return;
+    }
+#else
+    if(hpx::get_locality_id() != 0)
     {
         return;
     }
