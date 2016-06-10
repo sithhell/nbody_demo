@@ -9,6 +9,10 @@ g++ -Ofast -march=native -I /home/gentryx/libgeodecomp/src/ -L /home/gentryx/lib
 */
 #include <mpi.h>
 #include <hpx/config.hpp>
+
+int chunkThresholdNbody = 50;
+#define LGD_CHUNK_THRESHOLD ::chunkThresholdNbody
+
 #if defined(NO_OMP) && defined(NO_MPI)
 #include <libgeodecomp/parallelization/hpxsimulator.h>
 #include <hpx/hpx_main.hpp>
@@ -91,21 +95,7 @@ typedef NBodyContainer<128, float, InteractorMIC<128, float> > CellType;
 #else
 typedef NBodyContainer<128, float, InteractorAVX<128, float> > CellType;
 #endif
-typedef NBodyInitializer<CellType> NBodyInitializerType;
-typedef HpxSimulator::HpxSimulator<CellType, RecursiveBisectionPartition<3> > SimulatorType;
-// BOOST_CLASS_EXPORT_GUID(NBodyInitializerType, "NBodyInitializer");
-//
-// LIBGEODECOMP_REGISTER_HPX_SIMULATOR_DECLARATION(
-//     SimulatorType
-//   , NBodySimulator
-// );
-//
-// LIBGEODECOMP_REGISTER_HPX_SIMULATOR(
-//     SimulatorType
-//   , NBodySimulator
-// );
-// typedef TracingWriter<CellType> NbodyTracingWriter;
-// BOOST_CLASS_EXPORT(NbodyTracingWriter)
+LIBGEODECOMP_REGISTER_HPX_COMM_TYPE(CellType)
 #endif
 
 
@@ -118,6 +108,7 @@ int hpx_main(int argc, char **argv)
 int main(int argc, char **argv)
 #endif
 {
+    std::cout << "running main\n";
 #ifndef NO_MPI
     MPI_Init(&argc, &argv);
     Typemaps::initializeMaps();
@@ -130,6 +121,12 @@ int main(int argc, char **argv)
     if(scaleSize)
     {
         size = boost::lexical_cast<std::size_t>(scaleSize);
+    }
+
+    char *thresh = std::getenv("CHUNK_SIZE");
+    if(thresh)
+    {
+        chunkThresholdNbody = boost::lexical_cast<int>(thresh);
     }
 
     float factor = pow(size, 1.0/3.0);
@@ -168,13 +165,16 @@ int main(int argc, char **argv)
 
 #ifndef NO_MPI
     MPI_Finalize();
-#endif
     return 0;
+#else
+    return hpx::finalize();
+#endif
 }
 
 #ifdef NO_MPI
 int main(int argc, char **argv)
 {
+    std::cout << "starting up...\n";
     std::vector<std::string> config(1, "hpx.run_hpx_main!=1");
     return hpx::init(argc, argv, config);
 }

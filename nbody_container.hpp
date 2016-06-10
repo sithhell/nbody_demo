@@ -1,7 +1,7 @@
 #ifndef NBODY_CONTAINER_HPP
 #define NBODY_CONTAINER_HPP
 
-#include <boost/serialization/is_bitwise_serializable.hpp>
+#include <hpx/traits/is_bitwise_serializable.hpp>
 
 template<int CONTAINER_SIZE, typename FLOAT_TYPE, typename INTERACTOR>
 class __attribute__((aligned(64)))  NBodyContainer
@@ -12,7 +12,6 @@ public:
 
     class API
         : public APITraits::HasFixedCoordsOnlyUpdate
-        //, public APITraits::HasSpeed
         , public APITraits::HasOpaqueMPIDataType<NBodyContainer>
         , public APITraits::HasStencil<Stencils::Moore<3, 1> >
         , public APITraits::HasCubeTopology<3>
@@ -21,16 +20,6 @@ public:
     static const char * name()
     {
         return INTERACTOR::name();
-    }
-
-    static double speed()
-    {
-        char * speedStr = std::getenv("SPEED");
-        if(speedStr)
-        {
-            return boost::lexical_cast<double>(speedStr);
-        }
-        return 1.0;
     }
 
     inline NBodyContainer()
@@ -116,7 +105,7 @@ public:
     }
 };
 
-namespace boost { namespace serialization {
+namespace hpx { namespace traits {
 
     template<int CONTAINER_SIZE, typename FLOAT_TYPE, typename INTERACTOR>
     struct is_bitwise_serializable<NBodyContainer<CONTAINER_SIZE, FLOAT_TYPE, INTERACTOR> >

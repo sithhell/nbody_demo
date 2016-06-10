@@ -19,6 +19,7 @@ include_directories(${HPX_INCLUDE_DIR})
 include_directories(${libgeodecomp_INCLUDE_DIRS})
 
 add_definitions(-DQT_NO_KEYWORDS)
+add_definitions(${HPX_CXX_COMPILE_FLAGS})
 
 add_hpx_executable(
     nbody_smp

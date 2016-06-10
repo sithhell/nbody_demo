@@ -40,7 +40,7 @@ HPX_UTIL_REGISTER_FUNCTION(
 template<typename CELL>
 void runSimulation(Coord<3> dim)
 {
-    int outputFrequency = 200;
+    int outputFrequency = 10;
     int maxSteps = 200;
 
     NBodyInitializer<CELL> *init = new NBodyInitializer<CELL>(dim, maxSteps);
@@ -55,7 +55,7 @@ void runSimulation(Coord<3> dim)
     }
 #ifdef NO_MPI
 
-    HpxSimulator::HpxSimulator<CELL, RecursiveBisectionPartition<3> > sim(
+    HpxSimulator<CELL, RecursiveBisectionPartition<3> > sim(
         init,
         std::vector<double>(NumUpdateGroups()(), 1.0),
         0,//MPILayer().rank() ? 0 : new TracingBalancer(new NoOpBalancer()),
@@ -71,7 +71,7 @@ void runSimulation(Coord<3> dim)
     objType =
         MPI::Datatype::Create_struct(1, lengths, displacements, memberTypes);
     objType.Commit();
-    HiParSimulator::HiParSimulator<CELL, RecursiveBisectionPartition<3> > sim(
+    HiParSimulator<CELL, RecursiveBisectionPartition<3> > sim(
         init,
         0,//MPILayer().rank() ? 0 : new TracingBalancer(new NoOpBalancer()),
         maxSteps,
